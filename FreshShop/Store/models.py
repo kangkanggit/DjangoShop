@@ -1,5 +1,7 @@
 from django.db import models
 
+
+#卖家
 class Seller(models.Model):
     username = models.CharField(max_length=32,verbose_name="用户名")
     password = models.CharField(max_length=32, verbose_name="密码")
@@ -11,10 +13,12 @@ class Seller(models.Model):
 
     card_id = models.CharField(max_length=32, verbose_name="身份证号",null=True,blank=True)
 
+#店铺类型
 class StoreType(models.Model):
     store_type = models.CharField(max_length=32,verbose_name="类型名称")
     type_description = models.TextField(verbose_name="类型名称")
 
+#店铺
 class Store(models.Model):
     store_name = models.CharField(max_length=32, verbose_name="店铺名称")
     store_address = models.CharField(max_length=32,verbose_name="店铺地址")
@@ -26,6 +30,7 @@ class Store(models.Model):
     user_id = models.IntegerField(verbose_name="店铺主人")
     type = models.ManyToManyField(to=StoreType,verbose_name="店铺类型")
 
+#商品
 class Goods(models.Model):
     goods_name = models.CharField(max_length=32,verbose_name="商品名称")
     goods_price = models.FloatField(verbose_name="商品价格")
@@ -37,6 +42,7 @@ class Goods(models.Model):
 
     store_id = models.ManyToManyField(to=Store,verbose_name="商品店铺")
 
+#商品图片
 class GoodsImg(models.Model):
     img_address = models.ImageField(upload_to="store/images",verbose_name="图片地址")
     img_description = models.TextField(max_length=32, verbose_name="图片描述")
