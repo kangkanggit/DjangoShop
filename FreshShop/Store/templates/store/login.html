@@ -28,8 +28,8 @@
       <div class="card-body p-0">
         <!-- Nested Row within Card Body -->
         <div class="row">
-          <div class="col-lg-5 d-none d-lg-block bg-register-image"></div>
-          <div class="col-lg-7">
+          <div class="col-lg-6 d-none d-lg-block bg-login-image"></div>
+          <div class="col-lg-6">
             <div class="p-5">
               <div class="text-center">
                 <h1 class="h4 text-gray-900 mb-4">登录页面</h1>
@@ -38,6 +38,7 @@
                   {% csrf_token %}
                 <div class="form-group">
                   <input type="text" class="form-control form-control-user" name="username" placeholder="输入用户名">
+                    <span>{{ result.content}}</span>
                 </div>
                 <div class="form-group">
                   <input type="password" class="form-control form-control-user"  name="password" placeholder="输入密码">

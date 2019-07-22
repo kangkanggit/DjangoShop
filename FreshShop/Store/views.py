@@ -1,6 +1,7 @@
 import hashlib
 
 from django.shortcuts import render
+from django.http import JsonResponse
 from django.shortcuts import HttpResponseRedirect
 
 from Store.models import *
@@ -47,6 +48,7 @@ def login(request):
     登录功能，登录成功，跳转到首页
     失败跳转到，登录页面
     """
+    result = {'content':''}
     response = render(request,'store/login.html',locals())
     response.set_cookie('login_from','login_page')
     if request.method == 'POST':
@@ -61,10 +63,43 @@ def login(request):
                     response.set_cookie('username',username)
                     request.session['username'] = username
                     return response
+                else:
+                    result['content'] = '密码错误'
+            else:
+                result['content'] = '用户不存在'
     return response
 
 @loginValid
 #主页面
 def index(request):
     return render(request,'store/index.html',locals())
+
+
+
+#ajax验证
+def ajax_vaild(request):
+    restul = {'status':'error','content':''}
+    if request.method == 'GET':
+        username = request.GET.get('username')
+        if username:
+            user = Seller.objects.filter(username=username).first()
+            if user:
+                restul['content'] = '用户名存在'
+            else:
+                restul['content'] = '用户名可以用'
+                restul['status'] = 'success'
+        else:
+            restul['content'] = '用户名不为空'
+    return JsonResponse(restul)
+
+#模板页面
+def base(request):
+    return render(request,'store/blank.html')
+
+
+#退出功能
+def login_out(request):
+    response = HttpResponseRedirect('/Store/login/')
+    response.delete_cookie('username')
+    return response
 # Create your views here.
