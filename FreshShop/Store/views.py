@@ -72,7 +72,7 @@ def login(request):
 @loginValid
 #主页面
 def index(request):
-    return render(request,'store/index.html',locals())
+    return render(request, 'store/index.html', locals())
 
 
 
@@ -94,7 +94,7 @@ def ajax_vaild(request):
 
 #模板页面
 def base(request):
-    return render(request,'store/blank.html')
+    return render(request, 'store/index.html')
 
 
 #退出功能
