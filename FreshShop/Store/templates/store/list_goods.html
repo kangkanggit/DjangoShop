@@ -37,7 +37,7 @@
                        <td>{{ goods.goods_safeDate }}</td>
                        <td>
                            <a  class="btn btn-danger" href="#">上架</a>
-                           <a  class="btn btn-primary" href="#">清空</a>
+                           <a  class="btn btn-primary" href="/Store/delete_store/?id={{ goods.id }}">移除</a>
                        </td>
                    </tr>
                {% endfor %}

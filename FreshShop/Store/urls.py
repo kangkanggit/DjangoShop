@@ -11,5 +11,6 @@ urlpatterns = [
     path('base/',base),  # 模板版页面
     path('good_Goods/',good_Goods),#增加商品功能
     path('list_goods/',list_goods),#店铺的商品管理页
+    path('delete_store/',delete_store),#商品的移除功能
 
 ]

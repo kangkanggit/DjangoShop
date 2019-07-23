@@ -2,6 +2,7 @@ import hashlib
 
 from django.shortcuts import render
 from django.http import JsonResponse
+from django.shortcuts import HttpResponseRedirect
 from django.core.paginator import Paginator#分页模块
 from django.shortcuts import HttpResponseRedirect
 
@@ -209,9 +210,10 @@ def list_goods(request):
 
 
 #移除功能
-def delet_store(request):
-    pass
-
+def delete_store(request):
+    id = request.GET.get('id')
+    Goods.objects.get(id=id).delete()
+    return HttpResponseRedirect('/Store/list_goods/')
 #模板页面
 def base(request):
     return render(request, 'store/blank.html')
