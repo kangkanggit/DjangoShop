@@ -7,5 +7,7 @@ urlpatterns = [
     re_path('^$',index),#主页面
     path('index/',index),#主页面
     path('ajx/',ajax_vaild),#ajax的前端验证
-    path('base/',base),#模板版页面
+    path('regs/',register_store),#店铺注册页面
+    path('base/',base),  # 模板版页面
+
 ]

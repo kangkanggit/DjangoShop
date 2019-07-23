@@ -61,6 +61,7 @@ def login(request):
                 if setPassword(password) == user.password and cookies:
                     response = HttpResponseRedirect('/Store/index/')
                     response.set_cookie('username',username)
+                    response.set_cookie('user_id',user.id)
                     request.session['username'] = username
                     return response
                 else:
@@ -72,7 +73,21 @@ def login(request):
 @loginValid
 #主页面
 def index(request):
-    return render(request, 'store/index.html', locals())
+    """
+    判断是否有店铺
+    检查当前用户是谁
+    """
+    user_id = request.COOKIES.get('user_id')
+    if user_id:
+        user_id = int(user_id)
+    else:
+        user_id = 0
+    store = Store.objects.filter(user_id=user_id).first()
+    if store:
+        is_store = 1
+    else:
+        is_store = 0
+    return render(request, 'store/index.html',{'is_store':is_store})
 
 
 
@@ -92,9 +107,42 @@ def ajax_vaild(request):
             restul['content'] = '用户名不为空'
     return JsonResponse(restul)
 
+#店铺注册页面
+def register_store(request):
+    type_list = StoreType.objects.all()#查询类型
+    if request.method == 'POST':
+        post_data = request.POST#获取前端页面的信息
+        store_name = post_data.get('store_name')
+        store_address = post_data.get('store_address')
+        store_description = post_data.get('store_description')
+        store_phone = post_data.get('store_phone')
+        store_money = post_data.get('store_money')
+
+        user_id = int(request.COOKIES.get('user.id'))#验证的信息字段
+        type_lists = post_data.getlist('type')#类型多对多的关系返回的是一个列表
+        store_logo = request.FILES.get('store_logo')#获取照片的字段
+
+        #保存数据
+        store = Store()
+        store.store_name = store_name
+        store.store_address = store_address
+        store.store_description = store_description
+        store.store_phone = store_phone
+        store.store_money = store_money
+        store.user_id = user_id
+        store.store_logo = store_logo
+        store.save()#保存数据
+        for i in type_lists:#遍历列表内容依次保存
+            store_type = StoreType.objects.get(id=i)
+            store.type.add(store_type)
+        store.save()#保存数据
+    return render(request,'store/register_store.html',locals())
+
+
+
 #模板页面
 def base(request):
-    return render(request, 'store/index.html')
+    return render(request, 'store/blank.html')
 
 
 #退出功能

@@ -20,7 +20,8 @@
 
   <!-- Custom styles for this template-->
   <link href="/static/store/css/sb-admin-2.min.css" rel="stylesheet">
-
+  {% block style %}
+  {% endblock %}
 </head>
 
 <body id="page-top">
@@ -36,7 +37,7 @@
         <div class="sidebar-brand-icon rotate-n-15">
           <i class="fas fa-laugh-wink"></i>
         </div>
-        <div class="sidebar-brand-text mx-3">欢迎光临<sup>2</sup></div>
+        <div class="sidebar-brand-text mx-3">ck平台<sup>2周年</sup></div>
       </a>
 
       <!-- Divider -->
@@ -44,9 +45,15 @@
 
       <!-- Nav Item - Dashboard -->
       <li class="nav-item">
-        <a class="nav-link" href="index.html">
+          {% if is_store %}
+        <a class="nav-link" href="/Store/regs/">
           <i class="fas fa-fw fa-tachometer-alt"></i>
-          <span>仪表盘</span></a>
+          <span>进入店铺管理</span></a>
+          {% else %}
+         <a class="nav-link" href="/Store/regs/">
+          <i class="fas fa-fw fa-tachometer-alt"></i>
+          <span>没有店铺，去注册</span></a>
+          {% endif %}
       </li>
 
       <!-- Divider -->
@@ -54,14 +61,14 @@
 
       <!-- Heading -->
       <div class="sidebar-heading">
-        接口
+       操作
       </div>
 
       <!-- Nav Item - Pages Collapse Menu -->
       <li class="nav-item">
         <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="true" aria-controls="collapseTwo">
           <i class="fas fa-fw fa-cog"></i>
-          <span>组件</span>
+          <span>平台操作</span>
         </a>
         <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
           <div class="bg-white py-2 collapse-inner rounded">
@@ -93,29 +100,29 @@
       <hr class="sidebar-divider">
 
       <!-- Heading -->
-      <div class="sidebar-heading">
-        插件
-      </div>
-
-      <!-- Nav Item - Pages Collapse Menu -->
-      <li class="nav-item active">
-        <a class="nav-link" href="#" data-toggle="collapse" data-target="#collapsePages" aria-expanded="true" aria-controls="collapsePages">
-          <i class="fas fa-fw fa-folder"></i>
-          <span>网页</span>
-        </a>
-        <div id="collapsePages" class="collapse show" aria-labelledby="headingPages" data-parent="#accordionSidebar">
-          <div class="bg-white py-2 collapse-inner rounded">
-            <h6 class="collapse-header">登录功能区:</h6>
-            <a class="collapse-item" href="login.html">登录</a>
-            <a class="collapse-item" href="register.html">注册</a>
-            <a class="collapse-item" href="forgot-password.html">忘记密码</a>
-            <div class="collapse-divider"></div>
-            <h6 class="collapse-header">其他页面:</h6>
-            <a class="collapse-item" href="404.html">404 Page</a>
-            <a class="collapse-item active" href="blank.html">Blank Page</a>
-          </div>
-        </div>
-      </li>
+{#      <div class="sidebar-heading">#}
+{#        插件#}
+{#      </div>#}
+{##}
+{#      <!-- Nav Item - Pages Collapse Menu -->#}
+{#      <li class="nav-item active">#}
+{#        <a class="nav-link collapsed " href="#" data-toggle="collapse" data-target="#collapsePages" aria-expanded="false" aria-controls="collapsePages">#}
+{#          <i class="fas fa-fw fa-folder"></i>#}
+{#          <span>网页</span>#}
+{#        </a>#}
+{#        <div id="collapsePages" class="collapse " aria-labelledby="headingPages" data-parent="#accordionSidebar">#}
+{#          <div class="bg-white py-2 collapse-inner rounded">#}
+{#            <h6 class="collapse-header">登录功能区:</h6>#}
+{#            <a class="collapse-item" href="login.html">登录</a>#}
+{#            <a class="collapse-item" href="register.html">注册</a>#}
+{#            <a class="collapse-item" href="forgot-password.html">忘记密码</a>#}
+{#            <div class="collapse-divider"></div>#}
+{#            <h6 class="collapse-header">其他页面:</h6>#}
+{#            <a class="collapse-item" href="404.html">404 Page</a>#}
+{#            <a class="collapse-item" href="blank.html">Blank Page</a>#}
+{#          </div>#}
+{#        </div>#}
+{#      </li>#}
 
       <!-- Nav Item - Charts -->
       <li class="nav-item">
@@ -396,7 +403,6 @@
   <script src="/static/store/js/sb-admin-2.min.js"></script>
   {% block script %}
   {% endblock %}
-
 </body>
 
 </html>

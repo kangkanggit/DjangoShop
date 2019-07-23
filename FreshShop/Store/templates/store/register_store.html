@@ -1,0 +1,54 @@
+{% extends 'store/blank.html' %}
+{% block title %}
+    注册页面
+{% endblock %}
+
+{% block style %}
+
+{% endblock %}
+
+{% block content %}
+    <form action="" method="post" enctype="multipart/form-data">
+    <div>
+        {% csrf_token %}
+    </div>
+    <div class="form-group" >
+        <input type="text" class="form-control form-control-user" placeholder="店铺名称" name="store_name">
+    </div>
+    <div class="form-group">
+        <input type="text" class="form-control form-control-user" placeholder="店铺地址" name="store_address">
+    </div>
+    <div class="form-group">
+        <input type="text" class="form-control form-control-user" placeholder="店铺描述" name="store_description">
+    </div>
+    <div class="form-group">
+        <input type="text" class="form-control form-control-user" placeholder="店铺电话" name="store_phone">
+    </div>
+    <div class="form-group">
+        <input type="text" class="form-control form-control-user" placeholder="店铺押金" name="store_money">
+    </div>
+    <div class="form-group">
+        <select  class="form-control form-control-user"  name="type" multiple="multiple">
+            {% for t in type_list %}
+            <option name='{{ t.id }}' > {{ t.store_type }}</option>
+            {% endfor %}
+        </select>
+    </div>
+    <div class="form-group">
+        <input type="file" class="form-control form-control-user" placeholder="店铺logo" name="store_logo">
+    </div>
+        <div class="form-group">
+        <input type="submit" class="btn btn-primary btn-user btn-block" value="注册">
+    </div>
+    </form>
+
+
+System check identified no issues (0 silenced).
+July 23, 2019 - 13:45:41
+Django version 2.1.8, using settings 'FreshShop.settings'
+Starting development server at
+{% endblock %}
+
+{% block script %}
+
+{% endblock %}
