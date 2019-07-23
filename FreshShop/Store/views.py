@@ -171,7 +171,11 @@ def good_Goods(request):
 
 #商品的展示页面
 def list_goods(request):
-    good_list = Goods.objects.all()#查询所有的商品
+    keywords = request.GET.get('keyword','')
+    if keywords:
+        good_list = Goods.objects.filter(goods_name__contains=keywords)
+    else:
+        good_list = Goods.objects.all()
     return render(request,'store/list_goods.html',locals())
 
 
