@@ -1,0 +1,39 @@
+{% extends 'store/blank.html' %}
+{% block title %}
+    展示页面
+{% endblock %}
+{% block lable %}
+    <a class="btn border-right" href="/Store/good_Goods/">增加商品</a>
+{% endblock %}
+
+{% block content %}
+    <table class="table table-bordered">
+        <thead>
+               <tr>
+                   <th>商品的名称</th>
+                   <th>商品的价格</th>
+                   <th>商品的数量</th>
+                   <th>出厂日期</th>
+                   <th>保质期</th>
+                   <th>操作</th>
+               </tr>
+        </thead>
+        <tbody>
+               {% for goods in good_list %}
+                   <tr>
+                       <td>{{ goods.goods_name }}</td>
+                       <td>
+                           <input type="text" value="{{ goods.goods_price }}">
+                       </td>
+                       <td>{{ goods.goods_number }}</td>
+                       <td>{{ goods.goods_date |date:'Y-m-d'}}</td>
+                       <td>{{ goods.goods_safeDate }}</td>
+                       <td>
+                           <a  class="btn btn-danger" href="#">上架</a>
+                           <a  class="btn btn-primary" href="#">下架</a>
+                       </td>
+                   </tr>
+               {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}

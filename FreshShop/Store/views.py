@@ -61,7 +61,7 @@ def login(request):
                 if setPassword(password) == user.password and cookies:
                     response = HttpResponseRedirect('/Store/index/')
                     response.set_cookie('username',username)
-                    response.set_cookie('user_id',user.id)
+                    response.set_cookie('user.id',user.id)
                     request.session['username'] = username
                     return response
                 else:
@@ -120,6 +120,7 @@ def register_store(request):
 
         user_id = int(request.COOKIES.get('user.id'))#验证的信息字段
         type_lists = post_data.getlist('type')#类型多对多的关系返回的是一个列表
+        print(type_lists)
         store_logo = request.FILES.get('store_logo')#获取照片的字段
 
         #保存数据
@@ -134,10 +135,44 @@ def register_store(request):
         store.save()#保存数据
         for i in type_lists:#遍历列表内容依次保存
             store_type = StoreType.objects.get(id=i)
+            print(store_type)
             store.type.add(store_type)
         store.save()#保存数据
     return render(request,'store/register_store.html',locals())
 
+
+
+#增加商品的页面
+def good_Goods(request):
+    if request.method == "POST":
+        goods_name = request.POST.get('goods_name')
+        goods_price = request.POST.get('goods_price')
+        goods_number = request.POST.get('goods_number')
+        goods_description = request.POST.get('goods_description')
+        goods_date = request.POST.get('goods_date')
+        goods_safeDate = request.POST.get('goods_safeDate')
+        goods_image = request.FILES.get('goods_image')
+        good_store = request.POST.get('good_store')
+        goods = Goods()
+        goods.goods_name = goods_name
+        goods.goods_price = goods_price
+        goods.goods_number  = goods_number
+        goods.goods_description = goods_description
+        goods. goods_date =  goods_date
+        goods.goods_safeDate = goods_safeDate
+        goods.goods_image = goods_image
+        goods.save()#保存数据
+        goods.store_id.add(
+            Store.objects.get(id=int(good_store))
+        )
+        goods.save()#保存数据
+    return render(request, 'store/add_Goods.html')
+
+
+#商品的展示页面
+def list_goods(request):
+    good_list = Goods.objects.all()#查询所有的商品
+    return render(request,'store/list_goods.html',locals())
 
 
 #模板页面

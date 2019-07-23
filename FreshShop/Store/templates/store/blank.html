@@ -68,13 +68,15 @@
       <li class="nav-item">
         <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="true" aria-controls="collapseTwo">
           <i class="fas fa-fw fa-cog"></i>
-          <span>平台操作</span>
+          <span>店家操作</span>
         </a>
         <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
           <div class="bg-white py-2 collapse-inner rounded">
-            <h6 class="collapse-header">定制组件:</h6>
-            <a class="collapse-item" href="buttons.html">按钮功能</a>
-            <a class="collapse-item" href="cards.html">卡片</a>
+            <h6 class="collapse-header">操作功能区:</h6>
+            <a class="collapse-item" href="/Store/good_Goods/">增加商品</a>
+            <a class="collapse-item" href="cards.html">修改商品</a>
+            <a class="collapse-item" href="cards.html">删除商品</a>
+            <a class="collapse-item" href="/Store/list_goods/">查看库存</a>
           </div>
         </div>
       </li>
@@ -98,32 +100,6 @@
 
       <!-- Divider -->
       <hr class="sidebar-divider">
-
-      <!-- Heading -->
-{#      <div class="sidebar-heading">#}
-{#        插件#}
-{#      </div>#}
-{##}
-{#      <!-- Nav Item - Pages Collapse Menu -->#}
-{#      <li class="nav-item active">#}
-{#        <a class="nav-link collapsed " href="#" data-toggle="collapse" data-target="#collapsePages" aria-expanded="false" aria-controls="collapsePages">#}
-{#          <i class="fas fa-fw fa-folder"></i>#}
-{#          <span>网页</span>#}
-{#        </a>#}
-{#        <div id="collapsePages" class="collapse " aria-labelledby="headingPages" data-parent="#accordionSidebar">#}
-{#          <div class="bg-white py-2 collapse-inner rounded">#}
-{#            <h6 class="collapse-header">登录功能区:</h6>#}
-{#            <a class="collapse-item" href="login.html">登录</a>#}
-{#            <a class="collapse-item" href="register.html">注册</a>#}
-{#            <a class="collapse-item" href="forgot-password.html">忘记密码</a>#}
-{#            <div class="collapse-divider"></div>#}
-{#            <h6 class="collapse-header">其他页面:</h6>#}
-{#            <a class="collapse-item" href="404.html">404 Page</a>#}
-{#            <a class="collapse-item" href="blank.html">Blank Page</a>#}
-{#          </div>#}
-{#        </div>#}
-{#      </li>#}
-
       <!-- Nav Item - Charts -->
       <li class="nav-item">
         <a class="nav-link" href="charts.html">
@@ -342,7 +318,10 @@
         <div class="container-fluid">
 
           <!-- Page Heading -->
-{#          <h1 class="h3 mb-4 text-gray-800">空白页面</h1>#}
+          <h1 class="h3 mb-4 text-gray-800">
+              {% block lable %}
+              {% endblock %}
+          </h1>
             {% block content %}
             {% endblock %}
 

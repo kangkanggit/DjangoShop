@@ -30,7 +30,7 @@
     <div class="form-group">
         <select  class="form-control form-control-user"  name="type" multiple="multiple">
             {% for t in type_list %}
-            <option name='{{ t.id }}' > {{ t.store_type }}</option>
+            <option value={{ t.id }}> {{ t.store_type }}</option>
             {% endfor %}
         </select>
     </div>
@@ -41,12 +41,6 @@
         <input type="submit" class="btn btn-primary btn-user btn-block" value="注册">
     </div>
     </form>
-
-
-System check identified no issues (0 silenced).
-July 23, 2019 - 13:45:41
-Django version 2.1.8, using settings 'FreshShop.settings'
-Starting development server at
 {% endblock %}
 
 {% block script %}
