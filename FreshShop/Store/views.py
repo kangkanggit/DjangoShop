@@ -2,6 +2,7 @@ import hashlib
 
 from django.shortcuts import render
 from django.http import JsonResponse
+from django.core.paginator import Paginator#分页模块
 from django.shortcuts import HttpResponseRedirect
 
 from Store.models import *
@@ -91,7 +92,7 @@ def index(request):
 
 
 
-#ajax验证
+#ajax注册验证
 def ajax_vaild(request):
     restul = {'status':'error','content':''}
     if request.method == 'GET':
@@ -109,7 +110,7 @@ def ajax_vaild(request):
 
 #店铺注册页面
 def register_store(request):
-    type_list = StoreType.objects.all()#查询类型
+    type_list = StoreType.objects.all()#查询类型将他加载到前端页面
     if request.method == 'POST':
         post_data = request.POST#获取前端页面的信息
         store_name = post_data.get('store_name')
@@ -135,7 +136,7 @@ def register_store(request):
         store.save()#保存数据
         for i in type_lists:#遍历列表内容依次保存
             store_type = StoreType.objects.get(id=i)
-            print(store_type)
+            # print(store_type)
             store.type.add(store_type)
         store.save()#保存数据
     return render(request,'store/register_store.html',locals())
@@ -163,7 +164,7 @@ def good_Goods(request):
         goods.goods_image = goods_image
         goods.save()#保存数据
         goods.store_id.add(
-            Store.objects.get(id=int(good_store))
+            Store.objects.get(id=int(good_store))#多对一的保存形式
         )
         goods.save()#保存数据
     return render(request, 'store/add_Goods.html')
@@ -171,13 +172,45 @@ def good_Goods(request):
 
 #商品的展示页面
 def list_goods(request):
-    keywords = request.GET.get('keyword','')
+    """
+    写入展示页面的功能
+    """
+    keywords = request.GET.get('keyword','')#实现模糊查找
+    page_num = request.GET.get('page_num',1)#获取页面
+    muns = request.POST.get('mun',3)#获取前端数据
     if keywords:
-        good_list = Goods.objects.filter(goods_name__contains=keywords)
+        good_list = Goods.objects.filter(goods_name__contains=keywords)#从数据库中模糊查找
     else:
-        good_list = Goods.objects.all()
-    return render(request,'store/list_goods.html',locals())
+        good_list = Goods.objects.all()#展示所有
+    paginator = Paginator(good_list,muns)#展示的内容和每一页展示的数据
+    pages = paginator.count#获取数据的总条数
+    list_sum = paginator.num_pages#总页数
+    page = paginator.page(int(page_num))#获取展示页数对应的内容
+    page_range = paginator.page_range#获取页面列表数
+    next_page = int(page_num)#下一页默认等于当前页加一
+    go_page = int(page_num)#上一页默认当前页减一
+    #判断是下一页最后一页
+    print(next_page)
+    print(next_page)
+    # 判断是否为第最后一页
+    if next_page == list_sum:
+        next_page = 0
+    else:
+        next_page += 1
+    # 判断是否为第第一页
+    if go_page == 1:
+        go_page = 0
+    else:
+        go_page -= 1
+    return render(request,'store/list_goods.html',{'page':page,'page_range':page_range,'keywords':keywords,
+                                                   'pages':pages,'list_sum':list_sum,
+                                                   'next_page':next_page,'go_page':go_page
+                                                   ,'page_num':page_num})
 
+
+#移除功能
+def delet_store(request):
+    pass
 
 #模板页面
 def base(request):
