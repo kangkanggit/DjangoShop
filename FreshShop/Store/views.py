@@ -2,7 +2,6 @@ import hashlib
 
 from django.shortcuts import render
 from django.http import JsonResponse
-from django.shortcuts import HttpResponseRedirect
 from django.core.paginator import Paginator#分页模块
 from django.shortcuts import HttpResponseRedirect
 
@@ -23,7 +22,17 @@ def loginValid(fun):
         if k_user and s_user:
             user = Seller.objects.filter(username=k_user).first()
             if user and k_user == s_user:
-                return fun(request,*args,**kwargs)
+                user_id = request.COOKIES.get('user_id')
+                if user_id:
+                    user_id = int(user_id)
+                else:
+                    user_id = 0
+                store = Store.objects.filter(user_id=user_id).first()
+                if store:
+                    is_store = 1
+                else:
+                    is_store = 0
+                return fun(request,is_store,**kwargs)
         return HttpResponseRedirect('/Store/login/')
     return inner
 #注册功能
@@ -74,21 +83,7 @@ def login(request):
 
 @loginValid
 #主页面
-def index(request):
-    """
-    判断是否有店铺
-    检查当前用户是谁
-    """
-    user_id = request.COOKIES.get('user_id')
-    if user_id:
-        user_id = int(user_id)
-    else:
-        user_id = 0
-    store = Store.objects.filter(user_id=user_id).first()
-    if store:
-        is_store = 1
-    else:
-        is_store = 0
+def index(request,is_store):
     return render(request, 'store/index.html',{'is_store':is_store})
 
 
@@ -209,11 +204,43 @@ def list_goods(request):
                                                    ,'page_num':page_num})
 
 
+
+#商品的详情页
+def goods(request,goods_id):
+    goods_data = Goods.objects.filter(id=goods_id).first()
+    return render(request,'store/goods.html',locals())
+
 #移除功能
 def delete_store(request):
     id = request.GET.get('id')
     Goods.objects.get(id=id).delete()
     return HttpResponseRedirect('/Store/list_goods/')
+
+#商品修改功能
+def update_goods(request,goods_id):
+    goods_data = Goods.objects.filter(id=goods_id).first()
+    if request.method == "POST":
+        goods_name = request.POST.get('goods_name')
+        goods_price = request.POST.get('goods_price')
+        goods_number = request.POST.get('goods_number')
+        goods_description = request.POST.get('goods_description')
+        goods_date = request.POST.get('goods_date')
+        goods_safeDate = request.POST.get('goods_safeDate')
+        goods_image = request.FILES.get('goods_image')
+        goods = Goods.objects.get(id=goods_id)#获取对应的值
+        goods.goods_name = goods_name
+        goods.goods_price = goods_price
+        goods.goods_number = goods_number
+        goods.goods_description = goods_description
+        goods.goods_date = goods_date
+        goods.goods_safeDate = goods_safeDate
+        if goods_image:
+            goods.goods_image = goods_image
+        goods.save()  # 保存数据
+        return HttpResponseRedirect('/Store/goods/%s'%goods_id)#返回对应的商品页
+    return render(request,'store/upadta_goods.html',locals())
+
+
 #模板页面
 def base(request):
     return render(request, 'store/blank.html')

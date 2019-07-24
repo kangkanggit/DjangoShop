@@ -1,0 +1,75 @@
+{% extends 'store/blank.html' %}
+{% block title %}
+    {{ goods_data.goods_name }}修改
+{% endblock %}
+{% block style %}
+    <script src="/static/ckeditor/ckeditor/ckeditor.js"></script>
+  {% endblock %}
+{% block content %}
+    <form class="form" method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    <table class="table table-bordered">
+       <tr>
+           <td rowspan="3">
+               <img style="width: 200px;height: 300px" src="/static/{{ goods_data.goods_image }}" alt="">
+               <input type="file" class="form-control form-control-user"
+               name="goods_image">
+           </td>
+          <th style="color:darkmagenta">
+              商品名称
+          </th>
+           <td colspan="3">
+               <input type="text" class="form-control form-control-user" name="goods_name"
+               value="{{ goods_data.goods_name }}">
+           </td>
+       </tr>
+       <tr>
+           <th>
+               商品价格
+           </th>
+           <td>
+               <input type="text" class="form-control form-control-user" name="goods_price"
+               value="{{ goods_data.goods_price }}">
+           </td>
+           <th>
+               商品库存
+           </th>
+           <td>
+               <input type="text" class="form-control form-control-user" name="goods_number"
+               value="{{  goods_data.goods_number }}">
+           </td>
+       </tr>
+       <tr>
+           <th>生产日期</th>
+           <td>
+               <input type="text" class="form-control form-control-user" name="goods_date"
+               value="{{ goods_data.goods_date | date:'Y-m-n' }}">
+           </td>
+           <th>保质期</th>
+           <td>
+               <input type="text" class="form-control form-control-user" name="goods_safeDate"
+               value="{{ goods_data.goods_safeDate }}">
+           </td>
+       </tr>
+       <tr>
+           <th colspan="5" style="text-align:center;color: red">商品描述</th>
+       </tr>
+       <tr>
+           <td colspan="5" style="text-align: center">
+               <textarea class="form-control form-control-user" name="goods_description">{{ goods_data.goods_description }}</textarea>
+           </td>
+       </tr>
+        <tr>
+            <td colspan="5">
+                <input type="submit" value="提交修改" class="btn btn-primary btn-block" >
+            </td>
+        </tr>
+    </table>
+    </form>
+
+    {% block script %}
+        <script>
+            CKEDITOR.replace('goods_description',{uiColor:'#9AB8F3'})
+    </script>
+    {% endblock %}
+{% endblock %}
