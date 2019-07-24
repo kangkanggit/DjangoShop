@@ -135,7 +135,7 @@ def register_store(request):
         response = HttpResponseRedirect('/Store/index/')#跳转到主页面
         response.set_cookie('has_store',store.id)#并设置cookie
         return response
-    return render(request,'store/index.html',locals())
+    return render(request,'store/register_store.html',locals())
 
 
 
@@ -250,7 +250,41 @@ def update_goods(request,goods_id):
 
 #商品类型增加页面
 def add_storeType(request):
-    pass
+    result = {'status':'error','content':''}
+    if request.method == 'POST':
+        store_type = request.POST.get('store_type')
+        print(2)
+        print(store_type)
+        type_description = request.POST.get('type_description')
+        print(type_description)
+        if store_type and type_description:
+            stype = StoreType()
+            stype.store_type = store_type
+            stype.type_description = type_description
+            stype.save()#保存到数据库
+            return HttpResponseRedirect('/Store/index/')
+        else:
+            result['content'] = '不能为空'
+    return render(request,'store/add_sroteType.html')
+
+
+#商品类型的ajax的前端验证
+def ajax_type(request):
+    restul = {'status':'error','content':''}
+    if request.method == 'GET':
+        id_store_type = request.GET.get('id_store_type')
+        if id_store_type:
+            types = StoreType.objects.filter(store_type=id_store_type).first()
+            # print(types)
+            if types:
+                restul['content'] = '类型名存在'
+            else:
+                restul['content'] = '类型名可以用'
+                restul['status'] = 'success'
+        else:
+            restul['content'] = '不可以不填'
+    return JsonResponse(restul)
+
 
 
 #模板页面

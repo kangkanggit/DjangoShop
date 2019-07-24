@@ -5,13 +5,75 @@
 {% endblock %}
 
 {% block style %}
-
+<script src="/static/ckeditor/ckeditor/ckeditor.js"></script>
+<script src="/static/store/js/jquery.min.js"></script>
 {% endblock %}
 
 {% block content %}
-
+<form action="" method="post" >
+      {% csrf_token %}
+     <table class="table table-bordered">
+     <tr>
+         <th style="width: 100px">商品类型</th>
+         <td>
+             <input type="text" class="form-control form-control-user" placeholder="类型名称" id="id_store_type" name="store_type">
+              <span id="one" style="color: red"></span>
+         </td>
+     </tr>
+      <tr>
+          <th style="line-height: 300px">类型描述</th>
+          <td>
+              <textarea type="text" class="form-control form-control-user" placeholder="类型描述" id="id_ype_description" name="type_description"></textarea>
+          </td>
+      </tr>
+       <tr>
+           <td colspan="2">
+             <input type="submit" class="btn btn-primary btn-user btn-block" id="submit" value="提交类型">
+           </td>
+       </tr>
+     </table>
+</form>
 {% endblock %}
 
 {% block script %}
+<script>
+      //ajax_的前端效验
+        $('#id_store_type').blur(
+        function () {
+          var value = $('#id_store_type').val();
+          console.log(value);
+          var url = '/Store/ajax_type/?id_store_type='+value;
+          $.ajax(
+          {
+            url:url,
+            type:'get',
+            data:'',
+            success:function (data) {
+              var content = data.content;
+              if(content == '类型名可以用'){
+                  $('#one').css('color','green');
+                  $('#one').text(content);
+              }else {
+                  $('#one').css('color','red');
+                  $('#one').text(content);
+              }
+              var s = data.status;
+              if(s == 'error'){
+                $('#submit').attr('disabled',true);
+              }else {
+                $('#submit').attr('disabled',false);
+              }
+            },
+            error:function (error) {
+              console.log(error)
+            }
+          }
+      )
 
+    }
+);
+  </script>
+<script>
+            CKEDITOR.replace('type_description',{uiColor:'#9AB8F3'})
+    </script>
 {% endblock %}
