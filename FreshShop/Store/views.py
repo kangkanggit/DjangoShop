@@ -22,17 +22,7 @@ def loginValid(fun):
         if k_user and s_user:
             user = Seller.objects.filter(username=k_user).first()
             if user and k_user == s_user:
-                user_id = request.COOKIES.get('user_id')
-                if user_id:
-                    user_id = int(user_id)
-                else:
-                    user_id = 0
-                store = Store.objects.filter(user_id=user_id).first()
-                if store:
-                    is_store = 1
-                else:
-                    is_store = 0
-                return fun(request,is_store,**kwargs)
+                return fun(request,*args,**kwargs)
         return HttpResponseRedirect('/Store/login/')
     return inner
 #注册功能
@@ -53,27 +43,33 @@ def register(request):
             return HttpResponseRedirect('/Store/login/')
     return render(request,'store/register.html',locals())
 
+
 #登录功能
 def login(request):
     """
     登录功能，登录成功，跳转到首页
     失败跳转到，登录页面
     """
-    result = {'content':''}
+    result = {'content':''}#返回的判断
     response = render(request,'store/login.html',locals())
     response.set_cookie('login_from','login_page')
     if request.method == 'POST':
         username = request.POST.get('username')
         password = request.POST.get('password')
-        if username and password:
+        if username and password:#检测用户密码是否不为空
             user = Seller.objects.filter(username=username).first()
-            if user:
+            if user:#如果用户名正确
                 cookies = request.COOKIES.get('login_from')
-                if setPassword(password) == user.password and cookies:
+                if setPassword(password) == user.password and cookies == 'login_page':#判断是登陆页面过来的
                     response = HttpResponseRedirect('/Store/index/')
                     response.set_cookie('username',username)
-                    response.set_cookie('user.id',user.id)
+                    response.set_cookie('user_id',user.id)
                     request.session['username'] = username
+                    store = Store.objects.filter(user_id=user.id).first()
+                    if store:
+                        response.set_cookie('has_store',store.id)
+                    else:
+                        response.set_cookie('has_store','')
                     return response
                 else:
                     result['content'] = '密码错误'
@@ -83,8 +79,8 @@ def login(request):
 
 @loginValid
 #主页面
-def index(request,is_store):
-    return render(request, 'store/index.html',{'is_store':is_store})
+def index(request):
+    return render(request, 'store/index.html')
 
 
 
@@ -105,6 +101,7 @@ def ajax_vaild(request):
     return JsonResponse(restul)
 
 #店铺注册页面
+@loginValid
 def register_store(request):
     type_list = StoreType.objects.all()#查询类型将他加载到前端页面
     if request.method == 'POST':
@@ -115,7 +112,7 @@ def register_store(request):
         store_phone = post_data.get('store_phone')
         store_money = post_data.get('store_money')
 
-        user_id = int(request.COOKIES.get('user.id'))#验证的信息字段
+        user_id = int(request.COOKIES.get('user_id'))#验证的信息字段
         type_lists = post_data.getlist('type')#类型多对多的关系返回的是一个列表
         print(type_lists)
         store_logo = request.FILES.get('store_logo')#获取照片的字段
@@ -135,11 +132,15 @@ def register_store(request):
             # print(store_type)
             store.type.add(store_type)
         store.save()#保存数据
-    return render(request,'store/register_store.html',locals())
+        response = HttpResponseRedirect('/Store/index/')#跳转到主页面
+        response.set_cookie('has_store',store.id)#并设置cookie
+        return response
+    return render(request,'store/index.html',locals())
 
 
 
 #增加商品的页面
+@loginValid
 def good_Goods(request):
     if request.method == "POST":
         goods_name = request.POST.get('goods_name')
@@ -149,7 +150,8 @@ def good_Goods(request):
         goods_date = request.POST.get('goods_date')
         goods_safeDate = request.POST.get('goods_safeDate')
         goods_image = request.FILES.get('goods_image')
-        good_store = request.POST.get('good_store')
+        good_store = request.POST.get('good_store')#获取对应的id
+        # print(good_store)
         goods = Goods()
         goods.goods_name = goods_name
         goods.goods_price = goods_price
@@ -173,15 +175,20 @@ def list_goods(request):
     """
     keywords = request.GET.get('keyword','')#实现模糊查找
     page_num = request.GET.get('page_num',1)#获取页面
-    muns = request.POST.get('mun',3)#获取前端数据
+    muns = request.POST.get('mun',2)#获取前端数据
+    #查询店铺
+    store_id = request.COOKIES.get('has_store')
+    store = Store.objects.get(id=int(store_id))#查到对应的商品
     if keywords:
-        good_list = Goods.objects.filter(goods_name__contains=keywords)#从数据库中模糊查找
+        good_list = store.goods_set.filter(goods_name__contains=keywords)#从数据库中模糊查找
     else:
-        good_list = Goods.objects.all()#展示所有
+        good_list = store.goods_set.all()#展示所有
     paginator = Paginator(good_list,muns)#展示的内容和每一页展示的数据
     pages = paginator.count#获取数据的总条数
     list_sum = paginator.num_pages#总页数
+    print(page_num)
     page = paginator.page(int(page_num))#获取展示页数对应的内容
+    print(page)
     page_range = paginator.page_range#获取页面列表数
     next_page = int(page_num)#下一页默认等于当前页加一
     go_page = int(page_num)#上一页默认当前页减一
@@ -241,6 +248,11 @@ def update_goods(request,goods_id):
     return render(request,'store/upadta_goods.html',locals())
 
 
+#商品类型增加页面
+def add_storeType(request):
+    pass
+
+
 #模板页面
 def base(request):
     return render(request, 'store/blank.html')
@@ -250,5 +262,6 @@ def base(request):
 def login_out(request):
     response = HttpResponseRedirect('/Store/login/')
     response.delete_cookie('username')
+    response.delete_cookie('user_id')
     return response
 # Create your views here.

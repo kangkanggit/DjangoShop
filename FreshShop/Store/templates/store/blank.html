@@ -42,28 +42,19 @@
 
       <!-- Divider -->
       <hr class="sidebar-divider my-0">
-
       <!-- Nav Item - Dashboard -->
+      {% if request.COOKIES.has_store %}
       <li class="nav-item">
-          {% if is_store %}
         <a class="nav-link" href="/Store/regs/">
           <i class="fas fa-fw fa-tachometer-alt"></i>
           <span>已拥有店铺</span></a>
-          {% else %}
-         <a class="nav-link" href="/Store/regs/">
-          <i class="fas fa-fw fa-tachometer-alt"></i>
-          <span>没有店铺，去注册</span></a>
-          {% endif %}
       </li>
-
       <!-- Divider -->
       <hr class="sidebar-divider">
-
       <!-- Heading -->
       <div class="sidebar-heading">
        操作
       </div>
-
       <!-- Nav Item - Pages Collapse Menu -->
       <li class="nav-item">
         <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="true" aria-controls="collapseTwo">
@@ -74,12 +65,17 @@
           <div class="bg-white py-2 collapse-inner rounded">
             <h6 class="collapse-header">操作功能区:</h6>
             <a class="collapse-item" href="/Store/good_Goods/">增加商品</a>
-            <a class="collapse-item" href="cards.html">修改商品</a>
             <a class="collapse-item" href="/Store/list_goods/">查看库存</a>
           </div>
         </div>
       </li>
-
+      {% else %}
+        <li class="nav-item">
+        <a class="nav-link" href="/Store/regs/">
+          <i class="fas fa-fw fa-tachometer-alt"></i>
+          <span>没有店铺，前去注册</span></a>
+      </li>
+      {% endif %}
       <!-- Nav Item - Utilities Collapse Menu -->
       <li class="nav-item">
         <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseUtilities" aria-expanded="true" aria-controls="collapseUtilities">
@@ -364,7 +360,7 @@
         <div class="modal-body">分别是短暂的，期待下次你的到来，我们会更加努力的</div>
         <div class="modal-footer">
           <button class="btn btn-secondary" type="button" data-dismiss="modal">在逛会</button>
-          <a class="btn btn-primary" href="/Store/login/">离开</a>
+          <a class="btn btn-primary" href="/Store/login_out/">离开</a>
         </div>
       </div>
     </div>

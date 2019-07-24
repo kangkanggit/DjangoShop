@@ -34,7 +34,7 @@
         <input type="file" class="form-control form-control-user" placeholder="商品图片" name="goods_image">
     </div>
     <div class="form-group">
-        <input type="hidden" class="form-control form-control-user"  name="good_store" value="8">
+        <input type="hidden" class="form-control form-control-user"  name="good_store" value="{{ request.COOKIES.has_store }}">
     </div>
     <div class="form-group">
     <input type="submit" class="btn btn-primary btn-user btn-block" value="提交商品">
