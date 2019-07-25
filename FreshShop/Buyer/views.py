@@ -55,6 +55,22 @@ def register(request):
             return HttpResponseRedirect('/Buyer/login/')
     return render(request,'buyer/register.html')
 
+#ajax注册验证
+def ajax_register(request):
+   result = {'status':'error','content':''}
+   username = request.GET.get('user_name')
+   print(username)
+   if username:
+       buyer = Buyer.objects.filter(username=username).first()
+       print(buyer)
+       if buyer:
+           result['content'] = '用户名存重复用'
+       else:
+           result['status'] = 'success'
+           result['content'] = '用户名可以用'
+   else:
+       result['content'] = '用户名不可以为空'
+   return result
 
 #退出功能
 def logout(request):

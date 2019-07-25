@@ -114,7 +114,7 @@ def register_store(request):
 
         user_id = int(request.COOKIES.get('user_id'))#验证的信息字段
         type_lists = post_data.getlist('type')#类型多对多的关系返回的是一个列表
-        print(type_lists)
+
         store_logo = request.FILES.get('store_logo')#获取照片的字段
 
         #保存数据
@@ -142,6 +142,7 @@ def register_store(request):
 #增加商品的页面
 @loginValid
 def good_Goods(request):
+    goods_type = GoodsType.objects.all()
     if request.method == "POST":
         goods_name = request.POST.get('goods_name')
         goods_price = request.POST.get('goods_price')
@@ -151,6 +152,8 @@ def good_Goods(request):
         goods_safeDate = request.POST.get('goods_safeDate')
         goods_image = request.FILES.get('goods_image')
         good_store = request.POST.get('good_store')#获取对应的id
+        goods_type = request.POST.get('type')
+        # print(goods_type)
         # print(good_store)
         goods = Goods()#获取类的实例
         goods.goods_name = goods_name
@@ -160,13 +163,14 @@ def good_Goods(request):
         goods. goods_date =  goods_date
         goods.goods_safeDate = goods_safeDate
         goods.goods_image = goods_image
+        goods.goods_type = GoodsType.objects.get(id = goods_type)#多对一保存
         goods.save()#保存数据
         goods.store_id.add(
-            Store.objects.get(id=int(good_store))#多对一的保存形式
+            Store.objects.get(id=int(good_store))#多对多的保存形式
         )
         goods.save()#保存数据
         return HttpResponseRedirect('/Store/list_goods/up/')
-    return render(request, 'store/add_Goods.html')
+    return render(request, 'store/add_Goods.html',locals())
 
 
 #商品的展示页面
@@ -184,7 +188,7 @@ def list_goods(request,status):
     muns = request.POST.get('mun',2)#获取前端数据
     #查询店铺
     store_id = request.COOKIES.get('has_store')
-    store = Store.objects.get(id=int(store_id))#查到对应的商品
+    store = Store.objects.get(id=int(store_id))#查到对应的商点
     if keywords:
         good_list = store.goods_set.filter(goods_name__contains=keywords,goods_under=status_num)#从数据库中模糊查找
     else:
@@ -245,6 +249,7 @@ def delete_store(request):
 #商品修改功能
 def update_goods(request,goods_id):
     goods_data = Goods.objects.filter(id=goods_id).first()
+    goods_type = GoodsType.objects.all()
     if request.method == "POST":
         goods_name = request.POST.get('goods_name')
         goods_price = request.POST.get('goods_price')
@@ -253,6 +258,8 @@ def update_goods(request,goods_id):
         goods_date = request.POST.get('goods_date')
         goods_safeDate = request.POST.get('goods_safeDate')
         goods_image = request.FILES.get('goods_image')
+        goods_type = request.POST.get('type')
+        print(goods_type)
         goods = Goods.objects.get(id=goods_id)#获取对应的值
         goods.goods_name = goods_name
         goods.goods_price = goods_price
@@ -260,6 +267,7 @@ def update_goods(request,goods_id):
         goods.goods_description = goods_description
         goods.goods_date = goods_date
         goods.goods_safeDate = goods_safeDate
+        goods.goods_type = GoodsType.objects.get(id = goods_type)
         if goods_image:
             goods.goods_image = goods_image
         goods.save()  # 保存数据
@@ -267,15 +275,12 @@ def update_goods(request,goods_id):
     return render(request,'store/upadta_goods.html',locals())
 
 
-#商品类型增加页面
+#商店类型增加页面
 def add_storeType(request):
     result = {'status':'error','content':''}
     if request.method == 'POST':
         store_type = request.POST.get('store_type')
-        print(2)
-        print(store_type)
         type_description = request.POST.get('type_description')
-        print(type_description)
         if store_type and type_description:
             stype = StoreType()
             stype.store_type = store_type
@@ -305,6 +310,52 @@ def ajax_type(request):
     return JsonResponse(restul)
 
 
+#增加和展示商品类型
+def add_goodsType(request):
+    if request.method == 'POST':
+        name = request.POST.get('name')
+        description = request.POST.get('description')
+        picture = request.FILES.get('picture')
+        if name and description and picture:
+            goods_type = GoodsType()
+            goods_type.name = name
+            goods_type.description = description
+            goods_type.picture = picture
+            goods_type.save()#保存到数据库中
+            return HttpResponseRedirect('/Store/add_goodsType/')
+    keywords = request.GET.get('keyword', '')  # 实现模糊查找
+    page_num = request.GET.get('page_num', 1)  # 获取页面
+     # 查到对应的类型
+    if keywords:
+        good_list = GoodsType.objects.filter(goods_name__contains=keywords)  # 从数据库中模糊查找
+    else:
+        good_list = GoodsType.objects.all()  # 展示所有
+    paginator = Paginator(good_list, 3)  # 展示的内容和每一页展示的数据
+    pages = paginator.count  # 获取数据的总条数
+    list_sum = paginator.num_pages  # 总页数
+    print(page_num)
+    page = paginator.page(int(page_num))  # 获取展示页数对应的内容
+    print(page)
+    page_range = paginator.page_range  # 获取页面列表数
+    next_page = int(page_num)  # 下一页默认等于当前页加一
+    go_page = int(page_num)  # 上一页默认当前页减一
+    # 判断是否为第最后一页
+    if next_page == list_sum:
+        next_page = 0
+    else:
+        next_page += 1
+    # 判断是否为第第一页
+    if go_page == 1:
+        go_page = 0
+    else:
+        go_page -= 1
+    return render(request, 'store/show_goodsType.html',locals())
+
+#删除商品类型
+def dele_type(request):
+    id = request.GET.get('id')
+    GoodsType.objects.get(id=id).delete()
+    return HttpResponseRedirect('/Store/add_goodsType/')
 
 #模板页面
 def base(request):

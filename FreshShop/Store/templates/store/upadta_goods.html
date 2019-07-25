@@ -9,6 +9,13 @@
     <form class="form" method="post" enctype="multipart/form-data">
     {% csrf_token %}
     <table class="table table-bordered">
+        <tr>
+            {% for type in goods_type %}
+                <td colspan="5" style="text-align: center;color: darkmagenta" >
+                <input    name="type" multiple="multiple" value="{{ type.id }}" type="radio">{{ type.name }}
+           </td>
+            {% endfor %}
+        </tr>
        <tr>
            <td rowspan="3">
                <img style="width: 200px;height: 300px" src="/static/{{ goods_data.goods_image }}" alt="">

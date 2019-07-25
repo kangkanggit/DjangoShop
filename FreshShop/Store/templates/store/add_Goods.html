@@ -6,6 +6,9 @@
 {% block style %}
 
 {% endblock %}
+{% block lable %}
+  增加商品页
+{% endblock %}
 
 {% block content %}
     <form action="" method="post" enctype="multipart/form-data">
@@ -32,6 +35,11 @@
     </div>
     <div class="form-group">
         <input type="file" class="form-control form-control-user" placeholder="商品图片" name="goods_image">
+    </div>
+    <div class="form-group">
+        {% for type in goods_type %}
+        <input    name="type" multiple="multiple" value="{{ type.id }}" type="radio">{{ type.name }}
+        {% endfor %}
     </div>
     <div class="form-group">
         <input type="hidden" class="form-control form-control-user"  name="good_store" value="{{ request.COOKIES.has_store }}">
