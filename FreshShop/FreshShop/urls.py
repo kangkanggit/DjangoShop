@@ -15,11 +15,12 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path,include,re_path
-
+from Buyer.views import index
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('Store/',include('Store.urls')),
     path('Buyer/',include('Buyer.urls')),
+    re_path(r'^$',index),#主页路由
     path('ckeditor/',include('ckeditor_uploader.urls'))
 
 ]
