@@ -173,6 +173,7 @@ def good_Goods(request):
 def list_goods(request,status):
     """
     写入展示页面的功能
+    《需要要优化页面显示功能》
     """
     if status == 'up':
         status_num = 1
@@ -185,7 +186,7 @@ def list_goods(request,status):
     store_id = request.COOKIES.get('has_store')
     store = Store.objects.get(id=int(store_id))#查到对应的商品
     if keywords:
-        good_list = store.goods_set.filter(goods_name__contains=keywords,goods_under=status_num)#从数据库中模糊查找
+        good_list = store.goods_set.filter(goods_name__contains=keywords,goods_under=status_num).order_by()#从数据库中模糊查找
     else:
         good_list = store.goods_set.filter(goods_under=status_num)#展示所有
     paginator = Paginator(good_list,muns)#展示的内容和每一页展示的数据
@@ -197,9 +198,6 @@ def list_goods(request,status):
     page_range = paginator.page_range#获取页面列表数
     next_page = int(page_num)#下一页默认等于当前页加一
     go_page = int(page_num)#上一页默认当前页减一
-    #判断是下一页最后一页
-    print(next_page)
-    print(next_page)
     # 判断是否为第最后一页
     if next_page == list_sum:
         next_page = 0
