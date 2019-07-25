@@ -3,6 +3,7 @@ from django.http import  HttpResponseRedirect
 
 from Buyer.models import *
 from Store.views import setPassword #
+from Store.models import *
 
 
 #登录验证装饰器
@@ -37,7 +38,11 @@ def login(request):
 #首页
 @loginValid
 def index(request):
-    return render(request,'buyer/index.html')
+    goods_list_goods = Goods.objects.all()
+    goods_list_type = GoodsType.objects.all()
+    print(goods_list_type)
+    print(goods_list_goods)
+    return render(request,'buyer/index.html',locals())
 
 
 #注册功能
