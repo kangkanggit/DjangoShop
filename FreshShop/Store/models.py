@@ -39,7 +39,7 @@ class Goods(models.Model):
     goods_description = models.TextField(verbose_name="商品描述")
     goods_date = models.DateField(verbose_name="出厂日期")
     goods_safeDate = models.IntegerField(verbose_name="保质期")
-
+    goods_under = models.IntegerField(verbose_name="商品状态",default=1)#商品的上架下载状态
     store_id = models.ManyToManyField(to=Store,verbose_name="商品店铺")
 
 #商品图片

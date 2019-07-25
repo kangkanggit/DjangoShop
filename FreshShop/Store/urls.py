@@ -11,7 +11,8 @@ urlpatterns = [
     path('regs/',register_store),#店铺注册页面
     path('base/',base),  # 模板版页面
     path('good_Goods/',good_Goods),#增加商品功能
-    path('list_goods/',list_goods),#店铺的商品管理页
+    re_path(r'goods_under/(?P<status>\w+)',set_goods),#商品的下上架功能
+    re_path(r'list_goods/(?P<status>\w+)',list_goods),#店铺的商品展示页面
     path('delete_store/',delete_store),#商品的移除功能
     path('login_out/',login_out),#退出登陆
     path('add_storeType/',add_storeType),#增加商品类型

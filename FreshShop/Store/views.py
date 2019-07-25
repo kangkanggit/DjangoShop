@@ -152,7 +152,7 @@ def good_Goods(request):
         goods_image = request.FILES.get('goods_image')
         good_store = request.POST.get('good_store')#获取对应的id
         # print(good_store)
-        goods = Goods()
+        goods = Goods()#获取类的实例
         goods.goods_name = goods_name
         goods.goods_price = goods_price
         goods.goods_number  = goods_number
@@ -165,14 +165,19 @@ def good_Goods(request):
             Store.objects.get(id=int(good_store))#多对一的保存形式
         )
         goods.save()#保存数据
+        return HttpResponseRedirect('/Store/list_goods/up/')
     return render(request, 'store/add_Goods.html')
 
 
 #商品的展示页面
-def list_goods(request):
+def list_goods(request,status):
     """
     写入展示页面的功能
     """
+    if status == 'up':
+        status_num = 1
+    else:
+        status_num = 0
     keywords = request.GET.get('keyword','')#实现模糊查找
     page_num = request.GET.get('page_num',1)#获取页面
     muns = request.POST.get('mun',2)#获取前端数据
@@ -180,9 +185,9 @@ def list_goods(request):
     store_id = request.COOKIES.get('has_store')
     store = Store.objects.get(id=int(store_id))#查到对应的商品
     if keywords:
-        good_list = store.goods_set.filter(goods_name__contains=keywords)#从数据库中模糊查找
+        good_list = store.goods_set.filter(goods_name__contains=keywords,goods_under=status_num)#从数据库中模糊查找
     else:
-        good_list = store.goods_set.all()#展示所有
+        good_list = store.goods_set.filter(goods_under=status_num)#展示所有
     paginator = Paginator(good_list,muns)#展示的内容和每一页展示的数据
     pages = paginator.count#获取数据的总条数
     list_sum = paginator.num_pages#总页数
@@ -208,7 +213,7 @@ def list_goods(request):
     return render(request,'store/list_goods.html',{'page':page,'page_range':page_range,'keywords':keywords,
                                                    'pages':pages,'list_sum':list_sum,
                                                    'next_page':next_page,'go_page':go_page
-                                                   ,'page_num':page_num})
+                                                   ,'page_num':page_num,'status':status})
 
 
 
@@ -216,6 +221,22 @@ def list_goods(request):
 def goods(request,goods_id):
     goods_data = Goods.objects.filter(id=goods_id).first()
     return render(request,'store/goods.html',locals())
+
+
+#商品的下架功能
+def set_goods(request,status):
+    if status == 'up':
+        status_num = 1
+    else:
+        status_num = 0
+    id = request.GET.get('id')
+    referer = request.META.get('HTTP_REFERER')
+    if id:
+        goods = Goods.objects.filter(id=int(id)).first()
+        print(goods)
+        goods.goods_under = status_num
+        goods.save()#保存数据
+    return HttpResponseRedirect(referer)#返回当前页面
 
 #移除功能
 def delete_store(request):
@@ -295,7 +316,7 @@ def base(request):
 #退出功能
 def login_out(request):
     response = HttpResponseRedirect('/Store/login/')
-    response.delete_cookie('username')
-    response.delete_cookie('user_id')
+    for i in request.COOKIES:
+        response.delete_cookie(i)
     return response
 # Create your views here.
