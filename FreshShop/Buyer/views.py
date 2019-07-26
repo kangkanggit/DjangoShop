@@ -38,10 +38,19 @@ def login(request):
 #首页
 @loginValid
 def index(request):
-    goods_list_goods = Goods.objects.all()
-    goods_list_type = GoodsType.objects.all()
-    print(goods_list_type)
-    print(goods_list_goods)
+    result_list = []
+    goods_list_type = GoodsType.objects.all()#查询所有的类型
+    for goods_type in goods_list_type:#遍历每一个类型
+        goods_list = goods_type.goods_set.values()[:4]#查询4条语句
+        if goods_list:#判断是否有类型
+            goodsType = {
+                'id':goods_type.id,#id的名字
+                'name':goods_type.name,#类型名
+                'description':goods_type.description,#类型描述
+                'picture':goods_type.picture,#类型图片
+                'goods_list':goods_list,#查询图片
+            }
+            result_list.append(goodsType)
     return render(request,'buyer/index.html',locals())
 
 
@@ -76,6 +85,16 @@ def ajax_register(request):
    else:
        result['content'] = '用户名不可以为空'
    return result
+
+
+#商品的更多页面
+def show_goodlists(request):
+    goodslist = []
+    type_id = request.GET.get('type_id')
+    goods_type = GoodsType.objects.filter(id=type_id).first()#查找对应的类型
+    if goods_type:#如果存在
+        goods_list = goods_type.goods_set.filter(goods_under=1)#返回在线的商品
+    return render(request,'buyer/good_list.html',locals())
 
 #退出功能
 def logout(request):

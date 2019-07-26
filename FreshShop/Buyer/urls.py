@@ -5,6 +5,7 @@ urlpatterns = [
     path('register/',register),#注册页面
     path('index/',index),#主页面
     path('logout/',logout),#退出功能
+    path('show_goodlists/',show_goodlists),#商品的展示页
 
 ]
 urlpatterns +=[

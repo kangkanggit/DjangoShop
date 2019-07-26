@@ -37,16 +37,19 @@
         <input type="file" class="form-control form-control-user" placeholder="商品图片" name="goods_image">
     </div>
     <div class="form-group">
-        {% for type in goods_type %}
-        <input    name="type" multiple="multiple" value="{{ type.id }}" type="radio">{{ type.name }}
-        {% endfor %}
-    </div>
-    <div class="form-group">
         <input type="hidden" class="form-control form-control-user"  name="good_store" value="{{ request.COOKIES.has_store }}">
     </div>
     <div class="form-group">
-    <input type="submit" class="btn btn-primary btn-user btn-block" value="提交商品">
+        <select name="type" class="custom-select custom-select-sm form-control form-control-sm" aria-controls="dataTable">
+            {% for type in goods_type %}
+            <option value="{{ type.id }}">{{ type.name }}</option>
+            {% endfor %}
+        </select>
     </div>
+    <div class="form-group">
+        <input type="submit" class="btn btn-primary btn-user btn-block" value="提交商品">
+    </div>
+
     </form>
 {% endblock %}
 

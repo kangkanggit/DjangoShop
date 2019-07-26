@@ -10,11 +10,13 @@
     {% csrf_token %}
     <table class="table table-bordered">
         <tr>
-            {% for type in goods_type %}
-                <td colspan="5" style="text-align: center;color: darkmagenta" >
-                <input    name="type" multiple="multiple" value="{{ type.id }}" type="radio">{{ type.name }}
-           </td>
-            {% endfor %}
+            <td colspan="5">
+                <select name="type" class="custom-select custom-select-sm form-control form-control-sm " aria-controls="dataTable">
+                    {% for type in goods_type %}
+                    <option value="{{ type.id }}">{{ type.name }}</option>
+                    {% endfor %}
+                </select>
+            </td>
         </tr>
        <tr>
            <td rowspan="3">
