@@ -1,0 +1,120 @@
+{% extends 'buyer/base.html' %}
+
+{% block title %}
+商品的详情页面
+{% endblock %}
+{% block style %}
+<script src="/static/buyer/js/jquery.min.js"></script>
+{% endblock %}
+
+{% block content %}
+    <div class="breadcrumb">
+		<a href="#">全部分类</a>
+		<span>></span>
+		<a href="#">新鲜水果</a>
+		<span>></span>
+		<a href="#">商品详情</a>
+	</div>
+    <div class="goods_detail_con clearfix">
+		<div class="goods_detail_pic fl"><img style="width: 350px;height: 350px;" src="/static/{{ goods.goods_image }}"></div>
+
+		<div class="goods_detail_list fr">
+			<h3>{{ goods.goods_name }}</h3>
+			<p>{{ goods.goods_introduce  }}</p>
+			<div class="prize_bar">
+				<span class="show_pirze">¥<em>{{ goods.goods_price }}</em></span>
+				<span class="show_unit">单  位：500g</span>
+			</div>
+			<div class="goods_num clearfix">
+				<div class="num_name fl">数 量：</div>
+				<div class="num_add fl">
+					<input type="text" class="num_show fl form-control" id="number" value="1">
+                    <a href="#" class="add fr" id="add">+</a>
+					<a href="#" class="minus fr" id="minus">-</a>
+{#					<a href="javascript:;" class="add fr">+</a>#}
+{#					<a href="javascript:;" class="minus fr">-</a>#}
+				</div>
+			</div>
+			<div class="total">总价：<em>{{ goods.goods_price }}元</em></div>
+			<div class="operate_btn" id="submit">
+                <a href="#" class="buy_btn" >立即购买</a>
+				<a href="#" class="add_cart" >加入购物车</a>
+{#				<a href="javascript:;" class="buy_btn">立即购买</a>#}
+{#				<a href="javascript:;" class="add_cart" id="add_cart">加入购物车</a>#}
+			</div>
+		</div>
+	</div>
+
+	<div class="main_wrap clearfix">
+		<div class="l_wrap fl clearfix">
+    </div>
+
+		<div class="r_wrap fr clearfix">
+			<ul class="detail_tab clearfix">
+				<li class="active">商品介绍</li>
+				<li>评论</li>
+			</ul>
+
+			<div class="tab_content">
+				<dl>
+					<dt>商品详情：</dt>
+					<dd>{{ goods.goods_description |safe }} </dd>
+				</dl>
+			</div>
+
+		</div>
+	</div>
+{% endblock %}
+
+{% block script %}
+    <script>
+           $('#number').blur(
+               function () {
+                   var value = $('#number').val();
+                   var url = '/Buyer/ajax_show/?mun='+value+'&goods_id='+{{ goods.id }};
+                   $.ajax(
+                       {
+                           url:url,
+                           type:'get',
+                           data:'',
+                           success:function (data) {
+                              var s = data.status;
+                              console.log(s);
+                              if(s == 'error'){
+                                $('#submit').html('<a href="#" class="buy_btn" >立即购买</a>\n' +
+                                    '\t\t\t\t<a href="#" class="add_cart" >加入购物车</a>');
+                              }else {
+                                $('#submit').html('<a href="1" class="buy_btn" >立即购买</a>\n' +
+                                    '\t\t\t\t<a href="1" class="add_cart" >加入购物车</a>');
+                              }
+                            },
+                            error:function (error) {
+                              console.log(error)
+                            }
+                       }
+                   )
+               }
+           )
+    </script>
+{#    <script type="text/javascript" src="/static/buyer/js/jquery-1.12.2.js"></script>#}
+	<script type="text/javascript">
+		var $add_x = $('#add_cart').offset().top;
+		var $add_y = $('#add_cart').offset().left;
+
+		var $to_x = $('#show_count').offset().top;
+		var $to_y = $('#show_count').offset().left;
+
+		$(".add_jump").css({'left':$add_y+80,'top':$add_x+10,'display':'block'});
+		$('#add_cart').click(function(){
+			$(".add_jump").stop().animate({
+				'left': $to_y+7,
+				'top': $to_x+7},
+				"fast", function() {
+					$(".add_jump").fadeOut('fast',function(){
+						$('#show_count').html(2);
+					});
+
+			});
+		})
+	</script>
+{% endblock %}

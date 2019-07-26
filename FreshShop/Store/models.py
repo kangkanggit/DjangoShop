@@ -44,6 +44,7 @@ class Goods(models.Model):
     goods_image = models.ImageField(upload_to="store/images", verbose_name="商品图片")
     goods_number = models.IntegerField(verbose_name="商品数量库存")
     goods_description = models.TextField(verbose_name="商品描述")
+    goods_introduce = models.CharField(max_length=32,verbose_name='商品的介绍',null=True,blank=True)
     goods_date = models.DateField(verbose_name="出厂日期")
     goods_safeDate = models.IntegerField(verbose_name="保质期")
     goods_under = models.IntegerField(verbose_name="商品状态",default=1)#商品的上架下载状态

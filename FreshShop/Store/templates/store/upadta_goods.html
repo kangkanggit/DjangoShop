@@ -60,6 +60,14 @@
                value="{{ goods_data.goods_safeDate }}">
            </td>
        </tr>
+        <tr>
+           <th colspan="5" style="text-align:center;color: red">商品介绍</th>
+       </tr>
+        <tr>
+           <td colspan="5" style="text-align: center">
+               <textarea class="form-control form-control-user" name="goods_introduce">{{ goods_data.goods_introduce }}</textarea>
+           </td>
+       </tr>
        <tr>
            <th colspan="5" style="text-align:center;color: red">商品描述</th>
        </tr>
@@ -68,6 +76,7 @@
                <textarea class="form-control form-control-user" name="goods_description">{{ goods_data.goods_description }}</textarea>
            </td>
        </tr>
+
         <tr>
             <td colspan="5">
                 <input type="submit" value="提交修改" class="btn btn-primary btn-block" >

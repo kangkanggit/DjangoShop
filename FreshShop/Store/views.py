@@ -151,6 +151,7 @@ def good_Goods(request):
         goods_date = request.POST.get('goods_date')
         goods_safeDate = request.POST.get('goods_safeDate')
         goods_image = request.FILES.get('goods_image')
+        goods_introduce = request.POST.get('goods_introduce')
         good_store = request.POST.get('good_store')#获取对应的id
         goods_type = request.POST.get('type')
         # print(goods_type)
@@ -163,6 +164,7 @@ def good_Goods(request):
         goods. goods_date =  goods_date
         goods.goods_safeDate = goods_safeDate
         goods.goods_image = goods_image
+        goods.goods_introduce = goods_introduce
         goods.goods_type = GoodsType.objects.get(id = goods_type)#多对一保存
         goods.save()#保存数据
         goods.store_id.add(
@@ -256,6 +258,7 @@ def update_goods(request,goods_id):
         goods_number = request.POST.get('goods_number')
         goods_description = request.POST.get('goods_description')
         goods_date = request.POST.get('goods_date')
+        goods_introduce = request.POST.get('goods_introduce')
         goods_safeDate = request.POST.get('goods_safeDate')
         goods_image = request.FILES.get('goods_image')
         goods_type = request.POST.get('type')
@@ -266,6 +269,7 @@ def update_goods(request,goods_id):
         goods.goods_number = goods_number
         goods.goods_description = goods_description
         goods.goods_date = goods_date
+        goods.goods_introduce = goods_introduce
         goods.goods_safeDate = goods_safeDate
         goods.goods_type = GoodsType.objects.get(id = goods_type)
         if goods_image:

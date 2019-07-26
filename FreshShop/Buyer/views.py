@@ -1,9 +1,11 @@
 from django.shortcuts import render
+from django.http import JsonResponse
 from django.http import  HttpResponseRedirect
 
 from Buyer.models import *
 from Store.views import setPassword #
 from Store.models import *
+from alipay import AliPay
 
 
 #登录验证装饰器
@@ -72,19 +74,20 @@ def register(request):
 #ajax注册验证
 def ajax_register(request):
    result = {'status':'error','content':''}
-   username = request.GET.get('user_name')
-   print(username)
-   if username:
-       buyer = Buyer.objects.filter(username=username).first()
-       print(buyer)
-       if buyer:
-           result['content'] = '用户名存重复用'
+   if request.method == 'GET':
+       username = request.GET.get('user_name')
+       print(username)
+       if username:
+           buyer = Buyer.objects.filter(username=username).first()
+           print(buyer)
+           if buyer:
+               result['content'] = '用户名存重复用'
+           else:
+               result['status'] = 'success'
+               result['content'] = '用户名可以用'
        else:
-           result['status'] = 'success'
-           result['content'] = '用户名可以用'
-   else:
-       result['content'] = '用户名不可以为空'
-   return result
+           result['content'] = '用户名不可以为空'
+   return JsonResponse(result)
 
 
 #商品的更多页面
@@ -95,6 +98,48 @@ def show_goodlists(request):
     if goods_type:#如果存在
         goods_list = goods_type.goods_set.filter(goods_under=1)#返回在线的商品
     return render(request,'buyer/good_list.html',locals())
+
+
+
+
+#商品加入购物车的功能
+def adds_shop(request):
+    pass
+
+#商品的详情页
+def show_shop(request,goods_id):
+    goods = Goods.objects.filter(id=goods_id).first()#查询对应的商品
+    return render(request,'buyer/show_shop.html',locals())
+#商品的支付功能
+def pay_order(request):
+    money = request.GET.get('money')#获取订单的金额
+    pass
+
+
+
+
+#详细页面的前端ajax验证
+def ajax_show(request):
+    result = {'status':'error'}
+    if request.method == 'GET':
+        mun = request.GET.get('mun')
+        mund = int(mun)
+        print(mun)
+        print(type(mun))
+        goods_id = request.GET.get('goods_id')
+        print(goods_id)
+        print(type(goods_id))
+        goods_mun = Goods.objects.filter(id=int(goods_id)).first()
+        print(goods_mun)
+        print(goods_mun.goods_number)
+        if  mund and  mund > 0:
+           if  mund <= goods_mun.goods_number:
+               result['status']='success'
+           else:
+               result['status']='error'
+        else:
+            result['status']='error'
+    return JsonResponse(result)
 
 #退出功能
 def logout(request):
