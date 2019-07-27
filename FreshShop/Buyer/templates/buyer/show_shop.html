@@ -29,18 +29,15 @@
 				<div class="num_name fl">数 量：</div>
 				<div class="num_add fl">
 					<input type="text" class="num_show fl form-control" id="number" value="1">
-                    <a href="#" class="add fr" id="add">+</a>
-					<a href="#" class="minus fr" id="minus">-</a>
-{#					<a href="javascript:;" class="add fr">+</a>#}
-{#					<a href="javascript:;" class="minus fr">-</a>#}
+                    <a href="#" onclick="return false" class="add fr" id="add">+</a>
+
+					<a href="#"  onclick="return false" class="minus fr" id="minus">-</a>
 				</div>
 			</div>
-			<div class="total">总价：<em>{{ goods.goods_price }}元</em></div>
+			<div class="total">总价：<em id="money" >{{ goods.goods_price }}元</em></div>
 			<div class="operate_btn" id="submit">
                 <a href="#" class="buy_btn" >立即购买</a>
 				<a href="#" class="add_cart" >加入购物车</a>
-{#				<a href="javascript:;" class="buy_btn">立即购买</a>#}
-{#				<a href="javascript:;" class="add_cart" id="add_cart">加入购物车</a>#}
 			</div>
 		</div>
 	</div>
@@ -79,6 +76,8 @@
                            data:'',
                            success:function (data) {
                               var s = data.status;
+                              var moneys = data.money;
+                              var hh = moneys + '元';
                               console.log(s);
                               if(s == 'error'){
                                 $('#submit').html('<a href="#" class="buy_btn" >立即购买</a>\n' +
@@ -86,6 +85,7 @@
                               }else {
                                 $('#submit').html('<a href="1" class="buy_btn" >立即购买</a>\n' +
                                     '\t\t\t\t<a href="1" class="add_cart" >加入购物车</a>');
+                                $('#money').text(hh);
                               }
                             },
                             error:function (error) {
@@ -96,25 +96,66 @@
                }
            )
     </script>
-{#    <script type="text/javascript" src="/static/buyer/js/jquery-1.12.2.js"></script>#}
-	<script type="text/javascript">
-		var $add_x = $('#add_cart').offset().top;
-		var $add_y = $('#add_cart').offset().left;
-
-		var $to_x = $('#show_count').offset().top;
-		var $to_y = $('#show_count').offset().left;
-
-		$(".add_jump").css({'left':$add_y+80,'top':$add_x+10,'display':'block'});
-		$('#add_cart').click(function(){
-			$(".add_jump").stop().animate({
-				'left': $to_y+7,
-				'top': $to_x+7},
-				"fast", function() {
-					$(".add_jump").fadeOut('fast',function(){
-						$('#show_count').html(2);
-					});
-
-			});
-		})
-	</script>
+    <script>
+           $('#add').click(
+               function () {
+                   var value = $('#number').val();
+                   var url = '/Buyer/ajax_add/?muns='+value+'&goods_id='+{{ goods.id }};
+                   $.ajax(
+                       {
+                           url:url,
+                           type:'get',
+                           data:'',
+                           success:function (data) {
+                              var number = data.number;
+                              var s = data.status;
+                              var moneys = data.money;
+                              hh = moneys + '元';
+                              console.log(moneys);
+                              if(s == 'error'){
+                                $('#number').val(number)
+                              }else {
+                                $('#number').val(number);
+                                $('#money').text(hh);
+                              }
+                            },
+                            error:function (error) {
+                              console.log(error)
+                            }
+                       }
+                   )
+               }
+           )
+    </script>
+    <script>
+           $('#minus').click(
+               function () {
+                   var value = $('#number').val();
+                   var url = '/Buyer/ajax_minus/?muns='+value+'&goods_id='+{{ goods.id }};
+                   $.ajax(
+                       {
+                           url:url,
+                           type:'get',
+                           data:'',
+                           success:function(data){
+                           var number = data.number;
+                              var s = data.status;
+                              console.log(s);
+                              var moneys = data.money;
+                              var hh = moneys + '元';
+                              if(s == 'error'){
+                                $('#number').val(number)
+                              }else {
+                                $('#number').val(number);
+                                $('#money').text(hh);
+                              }
+                            },
+                            error:function (error) {
+                              console.log(error)
+                            }
+                       }
+                   )
+               }
+           )
+    </script>
 {% endblock %}

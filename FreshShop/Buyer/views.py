@@ -118,28 +118,67 @@ def pay_order(request):
 
 
 
-#详细页面的前端ajax验证
+#详细页面的前端输入ajax验证
 def ajax_show(request):
-    result = {'status':'error'}
+    result = {'status':'error','money':''}
     if request.method == 'GET':
         mun = request.GET.get('mun')
         mund = int(mun)
-        print(mun)
-        print(type(mun))
         goods_id = request.GET.get('goods_id')
-        print(goods_id)
-        print(type(goods_id))
         goods_mun = Goods.objects.filter(id=int(goods_id)).first()
-        print(goods_mun)
-        print(goods_mun.goods_number)
         if  mund and  mund > 0:
            if  mund <= goods_mun.goods_number:
+               result['money'] = (goods_mun.goods_price)*mund
                result['status']='success'
            else:
                result['status']='error'
         else:
             result['status']='error'
     return JsonResponse(result)
+
+#详细页面的数量加减商品的数量
+def ajax_add(request):
+    result = {'status': 'error','number':'','money':''}
+    if request.method == 'GET':
+        muns = request.GET.get('muns')#获取前端的数据
+        munsd = int(muns)
+        goods_id = request.GET.get('goods_id')#获取对应的id
+        goods_mun = Goods.objects.filter(id=int(goods_id)).first()#获取对应的商品
+        if  goods_id  and munsd >= 0:#判断条件
+            goods_number = goods_mun.goods_number
+            if munsd < goods_number:
+                result['status'] = 'success'
+                result['number'] = munsd+1
+                result['money'] = (goods_mun.goods_price) * (munsd+1)
+                print(result)
+            else:
+                result['number'] = goods_mun
+                result['status'] = 'error'
+        else:
+            result['status'] = 'error'
+    return JsonResponse(result)
+
+#详细页面数量减少的功能
+def ajax_minus(request):
+    result = {'status': 'error', 'number': '','money':''}
+    if request.method == 'GET':
+        muns = request.GET.get('muns')  # 获取前端的数据
+        munsd = int(muns)
+        print(munsd)
+        goods_id = request.GET.get('goods_id')  # 获取对应的id
+        goods_mun = Goods.objects.filter(id=int(goods_id)).first()  # 获取对应的商品
+        if muns and  munsd > 0:  # 判断条件
+            if munsd > 1 :
+                result['status'] = 'success'
+                result['money'] = (goods_mun.goods_price) * (munsd-1)
+                result['number'] = munsd - 1
+            else:
+                result['number'] = 1
+                result['status'] = 'error'
+        else:
+            result['status'] = 'error'
+    return JsonResponse(result)
+
 
 #退出功能
 def logout(request):
