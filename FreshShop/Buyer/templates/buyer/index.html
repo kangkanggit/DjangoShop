@@ -7,7 +7,44 @@
 	<script type="text/javascript" src="/static/buyer/js/jquery-ui.min.js"></script>
 	<script type="text/javascript" src="/static/buyer/js/slide.js"></script>
 {% endblock %}
-
+{% block ss %}
+    <div class="navbar_con">
+		<div class="navbar clearfix">
+			<div class="subnav_con fl">
+				<h1>全部商品分类</h1>
+				<span></span>
+				<ul class="subnav">
+					<li><a href="#" class="fruit">新鲜水果</a></li>
+					<li><a href="#" class="seafood">海鲜水产</a></li>
+					<li><a href="#" class="meet">猪牛羊肉</a></li>
+					<li><a href="#" class="egg">禽类蛋品</a></li>
+					<li><a href="#" class="vegetables">新鲜蔬菜</a></li>
+					<li><a href="#" class="ice">速冻食品</a></li>
+				</ul>
+			</div>
+			<ul class="navlist fl">
+				<li><a href="/Buyer/index/">首页</a></li>
+				<li class="interval">|</li>
+				<li><a href="">手机生鲜</a></li>
+				<li class="interval">|</li>
+				<li><a href="">抽奖</a></li>
+			</ul>
+		</div>
+	</div>
+{% endblock %}
+{% block class %}
+       <div class="search_bar clearfix">
+		<a href="index.html" class="logo fl"><img src="/static/buyer/images/logo.png"></a>
+		<div class="search_con fl">
+			<input type="text" class="input_text fl" name="" placeholder="搜索商品">
+			<input type="button" class="input_btn fr" name="" value="搜索">
+		</div>
+        <div class="guest_cart fr">
+			<a href="#" class="cart_name fl">我的购物车</a>
+			<div class="goods_count fl">1</div>
+		</div>
+    </div>
+{% endblock %}
 {% block content %}
     <div class="center_con clearfix">
 		<ul class="subnav fl">
@@ -37,7 +74,7 @@
     {% for goods_type in result_list %}
 	<div class="list_model">
 		<div class="list_title clearfix">
-			<h3 class="fl" id="model01">{{ goods_type.name }}</h3>
+			<h3 class="fl" id="{{ goods_type.aid }}">{{ goods_type.name }}</h3>
 			<div class="subtitle fl">
 				<span>|</span>
 				<a href="#">鲜芒</a>
@@ -52,8 +89,8 @@
 			<ul class="goods_list fl">
                     {% for goods in goods_type.goods_list %}
                     <li>
-                        <h4><a href="#">{{ goods.goods_name }}</a></h4>
-                        <a href="#"><img src="/static/{{ goods.goods_image }}"></a>
+                        <h4><a href="/Buyer/show_shop/{{ goods.id }}">{{ goods.goods_name }}</a></h4>
+                        <a href="/Buyer/show_shop/{{ goods.id }}"><img src="/static/{{ goods.goods_image }}"></a>
                         <div class="prize">¥ {{ goods.goods_price }}</div>
                     </li>
                     {% endfor %}

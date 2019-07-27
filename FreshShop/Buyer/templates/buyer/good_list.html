@@ -6,12 +6,49 @@
 {% block style %}
 
 {% endblock %}
-
+{% block ss %}
+    <div class="navbar_con">
+		<div class="navbar clearfix">
+			<div class="subnav_con fl">
+				<h1>全部商品分类</h1>
+				<span></span>
+				<ul class="subnav">
+					<li><a href="#" class="fruit">新鲜水果</a></li>
+					<li><a href="#" class="seafood">海鲜水产</a></li>
+					<li><a href="#" class="meet">猪牛羊肉</a></li>
+					<li><a href="#" class="egg">禽类蛋品</a></li>
+					<li><a href="#" class="vegetables">新鲜蔬菜</a></li>
+					<li><a href="#" class="ice">速冻食品</a></li>
+				</ul>
+			</div>
+			<ul class="navlist fl">
+				<li><a href="/Buyer/index/">首页</a></li>
+				<li class="interval">|</li>
+				<li><a href="">手机生鲜</a></li>
+				<li class="interval">|</li>
+				<li><a href="">抽奖</a></li>
+			</ul>
+		</div>
+	</div>
+{% endblock %}
+{% block class %}
+        <div class="search_bar clearfix">
+		<a href="index.html" class="logo fl"><img src="/static/buyer/images/logo.png"></a>
+		<div class="search_con fl">
+			<input type="text" class="input_text fl" name="" placeholder="搜索商品">
+			<input type="button" class="input_btn fr" name="" value="搜索">
+		</div>
+        <div class="guest_cart fr">
+			<a href="#" class="cart_name fl">我的购物车</a>
+			<div class="goods_count fl">1</div>
+		</div>
+    </div>
+{% endblock %}
 {% block content %}
     <div class="breadcrumb">
-		<a href="#">全部分类</a>
+		<a href="/" >全部分类</a>
 		<span>></span>
-		<a href="#">新鲜水果</a>
+		<a href="#" >{{ goods_type.name }}</a>
 	</div>
 
 	<div class="main_wrap clearfix">
@@ -21,9 +58,9 @@
 				<h3>新品推荐</h3>
 				<ul>
 					<li>
-						<a href="#"><img src="/static/buyer/images/goods/goods001.jpg"></a>
-						<h4><a href="#">进口柠檬</a></h4>
-						<div class="prize">￥3.90</div>
+						<a href="/Buyer/show_shop/{{  goods_first.id }}"><img src="/static/{{ goods_first.goods_image }}"></a>
+						<h4><a href="/Buyer/show_shop/{{  goods_first.id }}">{{ goods_first.name }}</a></h4>
+						<div class="prize">￥{{ goods_first.goods_price }}</div>
 					</li>
 				</ul>
 			</div>
@@ -49,7 +86,7 @@
                 {% endfor %}
             </ul>
             <div class="pagenation">
-                <a href="#"><上一页</a>
+                <a href="#">上一页</a>
                 <a href="#" class="active">1</a>
 				<a href="#">2</a>
 				<a href="#">3</a>

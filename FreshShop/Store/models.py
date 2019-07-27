@@ -35,7 +35,7 @@ class GoodsType(models.Model):
     name = models.CharField(max_length=32,verbose_name='商品的类型名')
     description = models.TextField(max_length=32,verbose_name='商品类型描述')
     picture = models.ImageField(upload_to='buyer/images',verbose_name='商品类型图片')
-
+    aid = models.CharField(max_length=32, null=True, blank=True, verbose_name='样式id')
 
 #商品
 class Goods(models.Model):

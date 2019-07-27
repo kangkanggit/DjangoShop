@@ -12,6 +12,7 @@ urlpatterns = [
 ]
 urlpatterns +=[
     path('base/',base),#模板页面
+    path('base1/',base1),#模板页面
     path('ajax_add/',ajax_add),#商品增加功能
     path('ajax_minus/',ajax_minus),#商品减少功能的验证
     path('ajax_show/',ajax_show),#商品详细页面输入功能的ajax的验证
