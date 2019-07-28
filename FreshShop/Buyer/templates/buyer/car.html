@@ -1,100 +1,56 @@
 {% extends 'buyer/base.html' %}
 
 {% block title %}
-商品的详情页面
+   购物车页面
 {% endblock %}
 {% block style %}
 <script src="/static/buyer/js/jquery.min.js"></script>
 {% endblock %}
-{% block ss %}
-   <div class="navbar_con">
-		<div class="navbar clearfix">
-			<div class="subnav_con fl">
-				<h1>全部商品分类</h1>
-				<span></span>
-				<ul class="subnav">
-					<li><a href="#" class="fruit">新鲜水果</a></li>
-					<li><a href="#" class="seafood">海鲜水产</a></li>
-					<li><a href="#" class="meet">猪牛羊肉</a></li>
-					<li><a href="#" class="egg">禽类蛋品</a></li>
-					<li><a href="#" class="vegetables">新鲜蔬菜</a></li>
-					<li><a href="#" class="ice">速冻食品</a></li>
-				</ul>
-			</div>
-			<ul class="navlist fl">
-				<li><a href="/Buyer/index/">首页</a></li>
-				<li class="interval">|</li>
-				<li><a href="">手机生鲜</a></li>
-				<li class="interval">|</li>
-				<li><a href="">抽奖</a></li>
-			</ul>
-		</div>
-	</div>
+{% block name %}
+    <div class="sub_page_name fl">|&nbsp;&nbsp;&nbsp;&nbsp;购物车</div>
 {% endblock %}
-{% block car %}
-        <div class="guest_cart fr">
-			<a href="/Buyer/adds_car/" class="cart_name fl">我的购物车</a>
-			<div class="goods_count fl">1</div>
-		</div>
-{% endblock %}
+
 {% block content %}
-    <div class="breadcrumb">
-		<a href="/" >全部分类</a>
-		<span>></span>
-		<a href="/Buyer/show_goodlists/?type_id={{ goods_type.id }}" >{{ goods_type.name }}</a>
-		<span>></span>
-		<a href="#" >商品详情</a>
-	</div>
-    <div class="goods_detail_con clearfix">
-		<div class="goods_detail_pic fl"><img style="width: 350px;height: 350px;" src="/static/{{ goods.goods_image }}"></div>
-
-		<div class="goods_detail_list fr">
-			<h3>{{ goods.goods_name }}</h3>
-			<p>{{ goods.goods_introduce  }}</p>
-			<div class="prize_bar">
-				<span class="show_pirze">¥<em>{{ goods.goods_price }}</em></span>
-				<span class="show_unit">单  位：500g</span>
+<div class="total_count">全部商品<em>1</em>件</div>
+	<ul class="cart_list_th clearfix">
+		<li class="col01">商品名称</li>
+		<li class="col02">商品单位</li>
+		<li class="col03">商品价格</li>
+		<li class="col04">数量</li>
+		<li class="col05">小计</li>
+		<li class="col06">操作</li>
+	</ul>
+{#    {% for good in goods %}#}
+    <ul class="cart_list_td clearfix">
+		<li class="col01"><input type="checkbox" name="" checked></li>
+		<li class="col02"><img src="/static/{{ goods.goods_image }}"></li>
+		<li class="col03">{{ goods.goods_name }}<br><em>{{ goods.goods_price }}元/500g</em></li>
+		<li class="col04">500g</li>
+		<li class="col05">{{ goods.goods_price }}元</li>
+		<li class="col06">
+			<div class="num_add">
+				<a href="#" class="add fl" onclick="return false" id="add">+</a>
+				<input type="text" class="num_show fl" id="number" value="1">
+				<a href="#" onclick="return false" class="minus fl" id="minus">-</a>
 			</div>
-			<div class="goods_num clearfix">
-				<div class="num_name fl">数 量：</div>
-				<div class="num_add fl">
-					<input type="text" class="num_show fl form-control" id="number" value="1">
-                    <a href="#" onclick="return false" class="add fr" id="add">+</a>
+		</li>
+		<li class="col07" id="money">{{ goods.goods_price }}</li>
+		<li class="col08"><a href="javascript:;">删除</a></li>
+	</ul>
 
-					<a href="#"  onclick="return false" class="minus fr" id="minus">-</a>
-				</div>
-			</div>
-			<div class="total">总价：<em id="money" >{{ goods.goods_price }}元</em></div>
-			<div class="operate_btn" id="submit">
-                <a href="/Buyer/pay_order/" class="buy_btn" >立即购买</a>
-				<a href="/Buyer/adds_car/?goods_id={{ goods.id }}" class="add_cart" >加入购物车</a>
-			</div>
-		</div>
-	</div>
+{#    {% endfor %}#}
 
-	<div class="main_wrap clearfix">
-		<div class="l_wrap fl clearfix">
-    </div>
+	<ul class="settlements">
+		<li class="col01"><input type="checkbox" name="" checked=""></li>
+		<li class="col02">全选</li>
+		<li class="col03">合计(不含运费)：<span>¥</span><em id="money1" name="numbers">{{ goods.goods_price }}</em><br>共计<b>1</b>件商品</li>
+		<li class="col04" id="jiesuan"><a href="/Buyer/pay_order/?number={{ goods.goods_price }}&goods_id={{ goods.id }}">去结算</a></li>
+	</ul>
 
-		<div class="r_wrap fr clearfix">
-			<ul class="detail_tab clearfix">
-				<li class="active">商品介绍</li>
-				<li>评论</li>
-			</ul>
-
-			<div class="tab_content">
-				<dl>
-					<dt>商品详情：</dt>
-					<dd>{{ goods.goods_description |safe }} </dd>
-				</dl>
-			</div>
-
-		</div>
-	</div>
 {% endblock %}
 
 {% block script %}
-    <script>
+<script>
            $('#number').blur(
                function () {
                    var value = $('#number').val();
@@ -110,12 +66,10 @@
                               var hh = moneys + '元';
                               console.log(s);
                               if(s == 'error'){
-                                $('#submit').html('<a href="#" class="buy_btn" >立即购买</a>\n' +
-                                    '\t\t\t\t<a href="#" class="add_cart" >加入购物车</a>');
+                                 console.log(s)
                               }else {
-                                $('#submit').html('<a href="/Buyer/pay_order/" class="buy_btn" >立即购买</a>\n' +
-                                    '\t\t\t\t<a href="/Buyer/adds_car/?goods_id={{ goods.id }}&" class="add_cart" >加入购物车</a>');
                                 $('#money').text(hh);
+                                $('#money1').text(hh);
                               }
                             },
                             error:function (error) {
@@ -126,7 +80,7 @@
                }
            )
     </script>
-    <script>
+<script>
            $('#add').click(
                function () {
                    var value = $('#number').val();
@@ -147,6 +101,7 @@
                               }else {
                                 $('#number').val(number);
                                 $('#money').text(hh);
+                                $('#money1').text(hh);
                               }
                             },
                             error:function (error) {
@@ -157,7 +112,7 @@
                }
            )
     </script>
-    <script>
+<script>
            $('#minus').click(
                function () {
                    var value = $('#number').val();
@@ -178,6 +133,7 @@
                               }else {
                                 $('#number').val(number);
                                 $('#money').text(hh);
+                                $('#money1').text(hh);
                               }
                             },
                             error:function (error) {

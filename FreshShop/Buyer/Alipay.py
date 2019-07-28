@@ -13,13 +13,13 @@ alipay = AliPay(
     appid='2016101000652521',
     app_notify_url=None,
     app_private_key_string=app_private_key_string,
-    alipay_public_key_string=app_private_key_string,
+    alipay_public_key_string=alipay_public_key_string,
     sign_type='RSA2'
 )
 
 #发起支付请请求
 order_string = alipay.api_alipay_trade_page_pay(
-    out_trade_no="10002", #订单号
+    out_trade_no="10003", #订单号
     total_amount=str(200000),#支付金额
     subject="西瓜", #交易主题
     return_url=None,

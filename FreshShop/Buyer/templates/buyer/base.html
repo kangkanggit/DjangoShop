@@ -9,7 +9,7 @@
     {% endblock %}
 </head>
 <body>
-	<div class="header_con">
+  <div class="header_con">
 		<div class="header">
 			<div class="welcome fl">欢迎来到天天生鲜!</div>
             <div class="fr">
@@ -29,30 +29,31 @@
 				</div>
                 {% endif %}
 				<div class="user_link fl">
+                    <span>|</span>
+					<a href="/Buyer/index/">首页</a>
 					<span>|</span>
-					<a href="user_center_info.html">用户中心</a>
+					<a href="/Buyer/user_infor/">用户中心</a>
 					<span>|</span>
-					<a href="cart.html">我的购物车</a>
+					<a href="/Buyer/adds_car/">我的购物车</a>
 					<span>|</span>
-					<a href="user_center_order.html">我的订单</a>
+					<a href="/Buyer/user_order/">我的订单</a>
 				</div>
 			</div>
 		</div>
 	</div>
+     <div class="search_bar clearfix">
+		<a href="index.html" class="logo fl"><img src="/static/buyer/images/logo.png"></a>
+        {% block name %}{% endblock %}
 
-    {% block class %}
-
-    {% endblock %}
-
+		<div class="search_con fl">
+			<input type="text" class="input_text fl" name="" placeholder="搜索商品">
+			<input type="button" class="input_btn fr" name="" value="搜索">
+		</div>
+         {% block car %}{% endblock %}
+    </div>
     {% block ss %}
+
     {% endblock %}
-
-
-{#	<div class="breadcrumb">#}
-{#		<a href="#">全部分类</a>#}
-{#		<span>></span>#}
-{#		<a href="#">新鲜水果</a>#}
-{#	</div>#}
     {% block content %}
     {% endblock %}
     {% block script %}
