@@ -20,4 +20,7 @@ urlpatterns = [
     re_path(r'update_goods/(?P<goods_id>\d+)',update_goods),#商品的修改页面
     path('add_goodsType/',add_goodsType),#商品类型的页面
     path('dele_type/',dele_type),#删除商品
+    path('order_list/',order_list),#订单列表页
+    path('confirm/',confirm),#确认订单
+    path('ok_order/',ok_order),#已处理订单页面
 ]

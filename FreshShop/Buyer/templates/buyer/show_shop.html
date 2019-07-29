@@ -55,20 +55,24 @@
 				<span class="show_pirze">¥<em>{{ goods.goods_price }}</em></span>
 				<span class="show_unit">单  位：500g</span>
 			</div>
+            <form method="post" action="/Buyer/pay_order/">
+                {% csrf_token %}
 			<div class="goods_num clearfix">
 				<div class="num_name fl">数 量：</div>
 				<div class="num_add fl">
-					<input type="text" class="num_show fl form-control" id="number" value="1">
+					<input type="text" name="count" class="num_show fl form-control" id="number" value="1">
+                    <input type="hidden" name="goods_id" class="num_show fl" value="{{ goods.id }}">
                     <a href="#" onclick="return false" class="add fr" id="add">+</a>
 
 					<a href="#"  onclick="return false" class="minus fr" id="minus">-</a>
 				</div>
 			</div>
-			<div class="total">总价：<em id="money" >{{ goods.goods_price }}元</em></div>
+                <div class="total">总价：<em id="money" >{{ goods.goods_price }}</em><em>元</em></div>
 			<div class="operate_btn" id="submit">
-                <a href="/Buyer/pay_order/" class="buy_btn" >立即购买</a>
-				<a href="/Buyer/adds_car/?goods_id={{ goods.id }}" class="add_cart" >加入购物车</a>
+                <input type="submit" class="buy_btn"  value="立即购买">立即购买
+				<a href="/Buyer/adds_car/?goods_id={{ goods.id }}"  class="add_cart" >加入购物车</a>
 			</div>
+            </form>
 		</div>
 	</div>
 
@@ -107,7 +111,7 @@
                            success:function (data) {
                               var s = data.status;
                               var moneys = data.money;
-                              var hh = moneys + '元';
+                              var hh = moneys ;
                               console.log(s);
                               if(s == 'error'){
                                 $('#submit').html('<a href="#" class="buy_btn" >立即购买</a>\n' +
@@ -115,7 +119,7 @@
                               }else {
                                 $('#submit').html('<a href="/Buyer/pay_order/" class="buy_btn" >立即购买</a>\n' +
                                     '\t\t\t\t<a href="/Buyer/adds_car/?goods_id={{ goods.id }}&" class="add_cart" >加入购物车</a>');
-                                $('#money').text(hh);
+                                $('#money').text(hh.toFixed(1));
                               }
                             },
                             error:function (error) {
@@ -140,13 +144,13 @@
                               var number = data.number;
                               var s = data.status;
                               var moneys = parseFloat(data.money,1);
-                              hh = moneys + '元';
+                              hh = moneys ;
                               console.log(moneys);
                               if(s == 'error'){
                                 $('#number').val(number)
                               }else {
                                 $('#number').val(number);
-                                $('#money').text(hh);
+                                $('#money').text(hh.toFixed(1));
                               }
                             },
                             error:function (error) {
@@ -172,12 +176,12 @@
                               var s = data.status;
                               console.log(s);
                               var moneys = data.money;
-                              var hh = moneys + '元';
+                              var hh = moneys  ;
                               if(s == 'error'){
                                 $('#number').val(number)
                               }else {
                                 $('#number').val(number);
-                                $('#money').text(hh);
+                                $('#money').text(hh.toFixed(1));
                               }
                             },
                             error:function (error) {

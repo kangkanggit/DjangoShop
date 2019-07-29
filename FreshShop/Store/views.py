@@ -6,6 +6,7 @@ from django.core.paginator import Paginator#分页模块
 from django.shortcuts import HttpResponseRedirect
 
 from Store.models import *
+from Buyer.models import *
 
 #加密
 def setPassword(password):
@@ -154,8 +155,6 @@ def good_Goods(request):
         goods_introduce = request.POST.get('goods_introduce')
         good_store = request.POST.get('good_store')#获取对应的id
         goods_type = request.POST.get('type')
-        # print(goods_type)
-        # print(good_store)
         goods = Goods()#获取类的实例
         goods.goods_name = goods_name
         goods.goods_price = goods_price
@@ -166,10 +165,7 @@ def good_Goods(request):
         goods.goods_image = goods_image
         goods.goods_introduce = goods_introduce
         goods.goods_type = GoodsType.objects.get(id = goods_type)#多对一保存
-        goods.save()#保存数据
-        goods.store_id.add(
-            Store.objects.get(id=int(good_store))#多对多的保存形式
-        )
+        goods.store_id = Store.objects.get(id=int(good_store))
         goods.save()#保存数据
         return HttpResponseRedirect('/Store/list_goods/up/')
     return render(request, 'store/add_Goods.html',locals())
@@ -187,20 +183,21 @@ def list_goods(request,status):
         status_num = 0
     keywords = request.GET.get('keyword','')#实现模糊查找
     page_num = request.GET.get('page_num',1)#获取页面
-    muns = request.POST.get('mun',2)#获取前端数据
+    muns = request.POST.get('mun',6)#获取前端数据
     #查询店铺
     store_id = request.COOKIES.get('has_store')
     store = Store.objects.get(id=int(store_id))#查到对应的商点
     if keywords:
-        good_list = store.goods_set.filter(goods_name__contains=keywords,goods_under=status_num)#从数据库中模糊查找
+        good_list = store.goods_set.filter(goods_name__contains=keywords,goods_under=status_num).order_by('-id')#从数据库中模糊查找
     else:
-        good_list = store.goods_set.filter(goods_under=status_num)#展示所有
+        good_list = store.goods_set.filter(goods_under=status_num).order_by('-id')#展示所有
     paginator = Paginator(good_list,muns)#展示的内容和每一页展示的数据
     pages = paginator.count#获取数据的总条数
     list_sum = paginator.num_pages#总页数
-    print(page_num)
-    page = paginator.page(int(page_num))#获取展示页数对应的内容
-    print(page)
+    if int(page_num) :
+       page = paginator.page(int(page_num))#获取展示页数对应的内容
+    else:
+       page = paginator.page(int(page_num)+1)#获取展示页数对应的内容
     page_range = paginator.page_range#获取页面列表数
     next_page = int(page_num)#下一页默认等于当前页加一
     go_page = int(page_num)#上一页默认当前页减一
@@ -220,7 +217,6 @@ def list_goods(request,status):
                                                    ,'page_num':page_num,'status':status})
 
 
-
 #商品的详情页
 def goods(request,goods_id):
     goods_data = Goods.objects.filter(id=goods_id).first()
@@ -237,7 +233,7 @@ def set_goods(request,status):
     referer = request.META.get('HTTP_REFERER')
     if id:
         goods = Goods.objects.filter(id=int(id)).first()
-        print(goods)
+
         goods.goods_under = status_num
         goods.save()#保存数据
     return HttpResponseRedirect(referer)#返回当前页面
@@ -262,7 +258,7 @@ def update_goods(request,goods_id):
         goods_safeDate = request.POST.get('goods_safeDate')
         goods_image = request.FILES.get('goods_image')
         goods_type = request.POST.get('type')
-        print(goods_type)
+        # print(goods_type)
         goods = Goods.objects.get(id=goods_id)#获取对应的值
         goods.goods_name = goods_name
         goods.goods_price = goods_price
@@ -331,15 +327,18 @@ def add_goodsType(request):
     page_num = request.GET.get('page_num', 1)  # 获取页面
      # 查到对应的类型
     if keywords:
-        good_list = GoodsType.objects.filter(goods_name__contains=keywords)  # 从数据库中模糊查找
+        good_list = GoodsType.objects.filter(goods_name__contains=keywords).order_by('-id')  # 从数据库中模糊查找
     else:
-        good_list = GoodsType.objects.all()  # 展示所有
-    paginator = Paginator(good_list, 3)  # 展示的内容和每一页展示的数据
+        good_list = GoodsType.objects.all().order_by('-id')  # 展示所有
+    paginator = Paginator(good_list, 6)  # 展示的内容和每一页展示的数据
     pages = paginator.count  # 获取数据的总条数
     list_sum = paginator.num_pages  # 总页数
-    print(page_num)
-    page = paginator.page(int(page_num))  # 获取展示页数对应的内容
-    print(page)
+
+    if int(page_num):
+        page = paginator.page(int(page_num))  # 获取展示页数对应的内容
+    else:
+        page = paginator.page(int(page_num) + 1)  # 获取展示页数对应的内容
+
     page_range = paginator.page_range  # 获取页面列表数
     next_page = int(page_num)  # 下一页默认等于当前页加一
     go_page = int(page_num)  # 上一页默认当前页减一
@@ -360,6 +359,83 @@ def dele_type(request):
     id = request.GET.get('id')
     GoodsType.objects.get(id=id).delete()
     return HttpResponseRedirect('/Store/add_goodsType/')
+
+
+#订单展示页面
+def order_list(request):
+    store_id = request.COOKIES.get('has_store')#获取店铺id
+    page_num = request.GET.get('page_num', 1)  # 获取页面
+    keywords = request.GET.get('keyword', '')  # 实现模糊查找
+    if keywords:
+        list_order = OrderDetail.objects.filter(order_id__order_status=2,goods_store=store_id,goods_name__contains=keywords).order_by('-id')#查询订单付款的订单
+    else:
+        list_order = OrderDetail.objects.filter(order_id__order_status=2, goods_store=store_id).order_by('-id')  # 查询订单付款的订单
+    paginator = Paginator(list_order, 6)  # 展示的内容和每一页展示的数据
+    pages = paginator.count  # 获取数据的总条数
+    list_sum = paginator.num_pages  # 总页数
+
+    if int(page_num):
+        page = paginator.page(int(page_num))  # 获取展示页数对应的内容
+    else:
+        page = paginator.page(int(page_num) + 1)  # 获取展示页数对应的内容
+
+    page_range = paginator.page_range  # 获取页面列表数
+    next_page = int(page_num)  # 下一页默认等于当前页加一
+    go_page = int(page_num)  # 上一页默认当前页减一
+    # 判断是否为第最后一页
+    if next_page == list_sum:
+        next_page = 0
+    else:
+        next_page += 1
+    # 判断是否为第第一页
+    if go_page == 1:
+        go_page = 0
+    else:
+        go_page -= 1
+    return render(request,'store/order_list.html',locals())
+
+#确认订单功能
+def confirm(request):
+    order_id = request.GET.get('order_id')#获取去订单表的id
+    order = Order.objects.get(id=order_id)#获取对应的订单
+    order.order_status = 3#修改订单状态
+    order.save()#保存修改
+    return HttpResponseRedirect('/Store/order_list')
+
+#已处理订单列表
+def ok_order(request):
+    store_id = request.COOKIES.get('has_store')  # 获取店铺id
+    page_num = request.GET.get('page_num', 1)  # 获取页面
+    keywords = request.GET.get('keyword', '')  # 实现模糊查找
+    if keywords:
+        list_order = OrderDetail.objects.filter(order_id__order_status=3, goods_store=store_id,
+                                                goods_name__contains=keywords).order_by('-id')  # 查询订单付款的订单
+    else:
+        list_order = OrderDetail.objects.filter(order_id__order_status=3, goods_store=store_id).order_by('-id')  # 查询订单付款的订单
+    paginator = Paginator(list_order, 6)  # 展示的内容和每一页展示的数据
+    pages = paginator.count  # 获取数据的总条数
+    list_sum = paginator.num_pages  # 总页数
+
+    if int(page_num):
+        page = paginator.page(int(page_num))  # 获取展示页数对应的内容
+    else:
+        page = paginator.page(int(page_num) + 1)  # 获取展示页数对应的内容
+
+    page_range = paginator.page_range  # 获取页面列表数
+    next_page = int(page_num)  # 下一页默认等于当前页加一
+    go_page = int(page_num)  # 上一页默认当前页减一
+    # 判断是否为第最后一页
+    if next_page == list_sum:
+        next_page = 0
+    else:
+        next_page += 1
+    # 判断是否为第第一页
+    if go_page == 1:
+        go_page = 0
+    else:
+        go_page -= 1
+    return render(request,'store/ok_order.html',locals())
+
 
 #模板页面
 def base(request):

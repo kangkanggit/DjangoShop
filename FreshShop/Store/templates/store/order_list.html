@@ -1,0 +1,71 @@
+{% extends 'store/blank.html' %}
+{% block title %}
+    展示页面
+{% endblock %}
+
+{% block content %}
+    <table class="table table-bordered">
+        <thead>
+               <tr>
+                   <th>订单编号</th>
+                   <th>订单名称</th>
+                   <th>订单价格</th>
+                   <th>操作</th>
+               </tr>
+        </thead>
+        <tbody>
+               {% for order in page %}
+                   <tr>
+                       <td>{{ order.order_id.order_id }}</td>
+                       <td>{{ order.goods_name }}</td>
+                       <td>{{ order.goods_total }}</td>
+                       <td>
+                           <a  class="btn btn-primary" href="/Store/confirm/?order_id={{ order.id }}">确认订单</a>
+                           <a  class="btn btn-danger" href="#">拒绝订单</a>
+                       </td>
+                   </tr>
+               {% endfor %}
+        </tbody>
+    </table>
+    <div class='row'>
+      <div class="div col-sm-12 col-md-5">
+          <div class="dataTables_info" id="dataTable_info">
+              一共查到{{ pages }}数据|共{{ list_sum }}页|当前是第{{ page_num }}页
+          </div>
+      </div>
+        <div class="col-sm-12 col-md-7">
+           <div class="dataTables_paginate paging_simple_numbers" id="dataTable_paginate">
+                <ul class="pagination">
+
+                        {% if go_page %}
+                        <li class="paginate_button page-item next">
+                        <a href="?keyword={{ keywords }}&page_num={{ go_page  }}"  class="page-link" >上一页</a>
+                        </li>
+                        {% else %}
+                         <li class="paginate_button page-item next disabled">
+                        <a href=""  class="page-link " >上一页</a>
+                        </li>
+                        {% endif %}
+                    {% for p in page_range %}
+                    <li class="paginate_button page-item active">
+                        <a href="?keyword={{ keywords }}&page_num={{ p }}" class="page-link">{{ p }}</a>
+                    </li>
+                    {% endfor %}
+
+                    {% if next_page %}
+                    <li class="paginate_button page-item next">
+                        <a href="?keyword={{ keywords }}&page_num={{ next_page }}" class="page-link">下一页</a>
+                    </li>
+                    {% else %}
+                    <li class="paginate_button page-item next disabled">
+                        <a href=""  class="page-link">下一页</a>
+                    </li>
+                    {% endif %}
+                </ul>
+           </div>
+        </div>
+      <div>
+
+      </div>
+    </div>
+{% endblock %}
