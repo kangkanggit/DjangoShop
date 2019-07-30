@@ -1,5 +1,4 @@
 import time
-import re
 from django.shortcuts import render
 from django.http import JsonResponse
 from django.http import  HttpResponseRedirect
@@ -107,10 +106,99 @@ def show_goodlists(request):
 
 
 
-#商品加入购物车的功能(需要改进)
+#商品加入购物车的功能
 def adds_car(request):
-    return render(request,'buyer/car.html')
+    result = {'state':'error','data':''}
+    if request.method == 'POST':
+        count = int(request.POST.get('count'))
+        goods_id = request.POST.get('goods_id')#获取商品的id
+        goods = Goods.objects.get(id=int(goods_id))
+        user_id = request.COOKIES.get('user_id')
 
+        cart = Cart()
+        cart.goods_name = goods.goods_name#商品名字
+        cart.goods_price = goods.goods_price#商品单价
+        cart.goods_total = goods.goods_price*count#商品的总价
+        cart.goods_number = count#商品的数量
+        cart.goods_picture = goods.goods_image#商品的图片
+        cart.goods_id = goods_id#商品id
+        cart.goods_store = goods.store_id.id#商店id
+        cart.user_id = user_id#用户id
+        cart.save()#保存数据
+        result['status'] = 'success'
+        result['data'] = '商品添加成功'
+    else:
+        result['data'] = '请求错误'
+    return JsonResponse(result)
+
+#列表页面的购物车功能
+def list_add(request):
+    if request.method == 'GET':
+        count = int(request.GET.get('count'))
+        goods_id = request.GET.get('goods_id')#获取商品的id
+        goods = Goods.objects.get(id=int(goods_id))#获取对应的商品
+        a= goods.goods_type.id
+        print(a)
+        user_id = request.COOKIES.get('user_id')#获取用户id
+
+        cart = Cart()
+        cart.goods_name = goods.goods_name#商品名字
+        cart.goods_price = goods.goods_price#商品单价
+        cart.goods_total = goods.goods_price*count#商品的总价
+        cart.goods_number = count#商品的数量
+        cart.goods_picture = goods.goods_image#商品的图片
+        cart.goods_id = goods_id#商品id
+        cart.goods_store = goods.store_id.id#商店id
+        cart.user_id = user_id#用户id
+        cart.save()#保存数据
+        url = '/Buyer/show_goodlists/?type_id=%s'%a#获取当前的路由
+        return HttpResponseRedirect(url)
+
+#购物车功能
+def car(request):
+    user_id = request.COOKIES.get('user_id')#获取用户id
+    goods_list = Cart.objects.filter(user_id=user_id)#获取购物车列表
+    h = [i.goods_total for i in goods_list]#循环购物车列表类
+    money = sum(h)#计算总价钱
+    number = len(goods_list)#统计商品个数
+
+    if request.method == "POST":
+        post_data = request.POST
+        print(post_data)
+        cart_data = [] #收集商品
+        for k,v in post_data.items():
+            if k.startswith('goods_'):
+                print(v)
+                cart_data.append(Cart.objects.get(id=int(v)))
+        print(cart_data)
+        goods_count = len(cart_data)#获取数据的数据
+        goods_total = sum([int(i.goods_total) for i in cart_data])#订单和
+        #保存订单
+        order = Order()
+        order.order_id = setOrder_id(str(user_id),str(goods_count),'3')
+        # 订单当中有多个商品或者多个店铺，使用goods_count来代替商品id，
+        order.goods_count = goods_count
+        order.order_user = Buyer.objects.get(id=user_id)
+        order.order_price = goods_total
+        order.order_status =1
+        order.save()
+
+        #详细订单的保存
+        print(cart_data)
+        for detail in cart_data:
+            order_detail = OrderDetail()
+            order_detail.order_id = order#订单号
+            order_detail.goods_id = detail.goods_id#商品id
+            order_detail.goods_name = detail.goods_name#商品名
+            order_detail.goods_price = detail.goods_price#商品的单价
+            order_detail.goods_number = detail.goods_number#商品的数量
+            order_detail.goods_total = detail.goods_total#商品的总价
+            order_detail.goods_store = detail.goods_store#店铺id
+            order_detail.goods_image = detail.goods_picture#店铺图片
+            order_detail.save()
+        url = '/Buyer/pay_order/?order_id=%s'%order.id
+        return HttpResponseRedirect(url)
+    return render(request,'buyer/car.html',locals())
 
 
 #商品的详情页
@@ -168,15 +256,25 @@ def pay_order(request):
         detail = [order_detail]
         return render(request, "buyer/play_order.html",locals())
     else:
-        return HttpResponse("非法请求，程序员在加班写这个功能中")
+        order_id = request.GET.get('order_id')#获取订单id
+        if order_id:
+            order = Order.objects.get(id=order_id)
+            detail = order.orderdetail_set.all()
+            # user_id = request.COOKIES.get("user_id")
+            # buyer = Buyer.objects.filter(id=user_id)  # 查找对应的用户
+            # adds_list = buyer.address_set.all()
+            return render(request,'buyer/play_order.html',locals())
+        else:
+            return HttpResponse("非法请求，程序员在加班写这个功能中")
 
 
 #支付功能
 def pay_money(request):
     if request.method == "GET":
-        name = request.GET.get('name')
+        order_id = request.GET.get('order')#得到订单号
         money = request.GET.get('money')
-        order_id = request.GET.get('order')
+        order = Order.objects.get(order_id=order_id)
+        name = order.order_user.username
         alipay_public_key_string = """-----BEGIN PUBLIC KEY-----
         MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAw33Gh5+47xMbHRi2FbdBoxJpje8cWtherlkmLbqCn4n8Wgz5dcoCi6YS/hPHHTeqKf6gNw4BnlYEDizpP/SWjD0NyBszn1wuzMX9jF4YwJ/bWOtPaGa91Bu26AGVoyILPtvMIMCMHlrvEOWJ9qcn8Nhf9i3W2nC+eO9OSHE61M1EtosQsqByLck8YmmeuRpPAtU8avUgfuTIQtri3ik3aSjaiqLFpfrBaPL19S9Ax6nfC/ZiI3eof7G0Nph2lt73IrNqOpU226ZetLJyDYp0Ou8kt185tiSeEOKf/ydx83fcSGj99SwnK4xb18/aysJ/LoyMbaGdQ00g/3kQ5GprpQIDAQAB
         -----END PUBLIC KEY-----"""
@@ -209,7 +307,6 @@ def pay_money(request):
         return HttpResponseRedirect("https://openapi.alipaydev.com/gateway.do?" + order_string)
 
 
-
 #用户中心的编写
 #个人信息页面
 @loginValid
@@ -230,17 +327,49 @@ def user_infor(request):
 #编写订单页面(需要开发)
 @loginValid
 def user_order(request):
+
     k_user = request.COOKIES.get('username')
     s_user = request.session.get('username')
     if k_user == s_user:
         user = request.COOKIES.get('user_id')#获取用户的id
-        orders_list = Order.objects.filter(order_status=3).first()#查询等于3的订单表
-        print(orders_list)
-        orders_show = OrderDetail.objects.filter(order_id__order_status=3)#获取的订单详情表
-        # for i in orders_list:
-        #     a= i.order_id
-        #     c= a[:14]
-        #     result = c[:4]+'-'+c[4:6]+'-'+c[6:8]+' '+c[8:10]+':'+c[10:12]+':'+c[12:]#生成订单时间
+        #未支付订单
+        order_id2 = Order.objects.filter(order_status=1, order_user=user)  # 查询等于3的订单表
+        if order_id2:
+            for i in order_id2 :
+                if i:
+                    order2 = Order.objects.filter(id=i.id).first()
+                    show_list2 = order2.orderdetail_set.all()
+                    for s in show_list2:
+                        a = order2.order_id
+                        c = a[:14]
+                        result2 = c[:4] + '-' + c[4:6] + '-' + c[6:8] + ' ' + c[8:10] + ':' + c[10:12] + ':' + c[12:]  # 生成订单时间
+
+        #发货订单
+        order_id = Order.objects.filter(order_status=3,order_user=user)#查询等于3的订单表
+        if order_id:
+            for i in order_id :
+                if i:
+                    order = Order.objects.filter(id=i.id).first()
+                    show_list = order.orderdetail_set.all()
+                    for s in show_list:
+                        a= order.order_id
+                        c= a[:14]
+                        result = c[:4]+'-'+c[4:6]+'-'+c[6:8]+' '+c[8:10]+':'+c[10:12]+':'+c[12:]#生成订单时间
+
+
+        #没发货订单
+        order_id1 = Order.objects.filter(order_status=2,order_user=user)#查询等于3的订单表
+        if order_id1:
+            for i in order_id1 :
+                if i:
+                    order1 = Order.objects.filter(id=i.id).first()#查询订单表
+                    show_list1 = order1.orderdetail_set.all()
+                    print(show_list1)
+                    for h in show_list1:
+
+                        a= order1.order_id
+                        c= a[:14]
+                        result1 = c[:4]+'-'+c[4:6]+'-'+c[6:8]+' '+c[8:10]+':'+c[10:12]+':'+c[12:]#生成订单时间
         #查询支付成功的订单表，并且店家确认的商品
         return render(request,'buyer/user_order.html',locals())
     return render(request,'buyer/index.html')
@@ -300,13 +429,13 @@ def ajax_add(request):
         goods_id = request.GET.get('goods_id')#获取对应的id
         goods_mun = Goods.objects.filter(id=int(goods_id)).first()#获取对应的商品
         if  goods_id  and munsd >= 0:#判断条件
-            goods_number = goods_mun.goods_number
+            goods_number = goods_mun.goods_number#获取商品的库存
             if munsd < goods_number:
                 result['status'] = 'success'
                 result['number'] = munsd+1
                 result['money'] = (goods_mun.goods_price) * (munsd+1)
             else:
-                result['number'] = goods_mun
+                result['number'] = goods_number
                 result['status'] = 'error'
         else:
             result['status'] = 'error'
@@ -318,7 +447,6 @@ def ajax_minus(request):
     if request.method == 'GET':
         muns = request.GET.get('muns')  # 获取前端的数据
         munsd = int(muns)
-        print(munsd)
         goods_id = request.GET.get('goods_id')  # 获取对应的id
         goods_mun = Goods.objects.filter(id=int(goods_id)).first()  # 获取对应的商品
         if muns and  munsd > 0:  # 判断条件

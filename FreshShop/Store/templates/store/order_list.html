@@ -8,20 +8,22 @@
         <thead>
                <tr>
                    <th>订单编号</th>
-                   <th>订单名称</th>
+                   <th>订单用户</th>
                    <th>订单价格</th>
+                   <th>订单地址</th>
                    <th>操作</th>
                </tr>
         </thead>
         <tbody>
                {% for order in page %}
                    <tr>
-                       <td>{{ order.order_id.order_id }}</td>
-                       <td>{{ order.goods_name }}</td>
-                       <td>{{ order.goods_total }}</td>
+                       <td>{{ order.order_id }}</td>
+                       <td>{{ order.order_user }}</td>
+                       <td>{{ order.order_price }}</td>
+                       <td>{{ order.order_address }}</td>
                        <td>
                            <a  class="btn btn-primary" href="/Store/confirm/?order_id={{ order.id }}">确认订单</a>
-                           <a  class="btn btn-danger" href="#">拒绝订单</a>
+                           <a  class="btn btn-danger" href="/Store/delete_order/?ord">拒绝订单</a>
                        </td>
                    </tr>
                {% endfor %}
