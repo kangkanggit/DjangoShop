@@ -1,0 +1,27 @@
+{% extends 'store/blank.html' %}
+{% block title %}
+    展示页面
+{% endblock %}
+
+{% block content %}
+    <table class="table table-bordered">
+        <thead>
+               <tr>
+                   <th>商品图片</th>
+                   <th>商品名称</th>
+                   <th>商品价格</th>
+                   <th>商品数量</th>
+               </tr>
+        </thead>
+        <tbody>
+               {% for order in  order_list1 %}
+                   <tr>
+                       <td><img  style="width: 200px;height:200px;" src="/static/{{ order.goods_image }}" ></td>
+                       <td>{{ order.goods_name }}</td>
+                       <td>{{ order.goods_total }}</td>
+                       <td>{{ order.goods_number }}</td>
+                   </tr>
+               {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}

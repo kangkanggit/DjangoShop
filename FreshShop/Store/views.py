@@ -363,17 +363,22 @@ def dele_type(request):
 
 #订单展示页面
 def order_list(request):
+    list_order3 = []
     store_id = request.COOKIES.get('has_store')#获取店铺id
     page_num = request.GET.get('page_num', 1)  # 获取页面
     keywords = request.GET.get('keyword', '')  # 实现模糊查找
     if keywords:
-        list_order = Order.objects.filter(order_status=2,goods_name__contains=keywords).order_by('-id')
-        # list_order = OrderDetail.objects.filter(order_id__order_status=2,goods_store=store_id,goods_name__contains=keywords).order_by('-id')#查询订单付款的订单
-
+        list_order1 = OrderDetail.objects.filter(order_id__order_status=2,goods_store=store_id,goods_name__contains=keywords).order_by('-id')#查询订单付款的订单
+        for i in list_order1 :#循环查询的对象
+            if i.order_id not in list_order3:
+                list_order3.append(i.order_id)
     else:
-        list_order = Order.objects.filter(order_status=2).order_by('-id')
-        # list_order = OrderDetail.objects.filter(order_id__order_status=2, goods_store=store_id).order_by('-id')  # 查询订单付款的订单
-    paginator = Paginator(list_order, 6)  # 展示的内容和每一页展示的数据
+        list_order1 = OrderDetail.objects.filter(order_id__order_status=2, goods_store=store_id).order_by('-id')  # 查询订单付款的订单对应店铺的id
+        for i in list_order1 :#循环查询的对象
+            if i.order_id not in list_order3:
+                list_order3.append(i.order_id)
+
+    paginator = Paginator(list_order3, 6)  # 展示的内容和每一页展示的数据
     pages = paginator.count  # 获取数据的总条数
     list_sum = paginator.num_pages  # 总页数
 
@@ -401,28 +406,48 @@ def order_list(request):
 def confirm(request):
     order_id = request.GET.get('order_id')#获取详细订单表的id
     # print(order_id)
-    order = OrderDetail.objects.get(id=order_id)#获取对应的订单
-
-    orders = order.order_id
-    orders.order_status = 3
-    orders.save()#保存数据
+    order = Order.objects.get(id=order_id)#获取对应的订单
+    order.order_status = 3
+    order.save()#保存数据
     return HttpResponseRedirect('/Store/order_list')
+
+#订单详细页面
+def show_order(request):
+    order_id = request.GET.get('order_id')#获取订单的id
+    order = Order.objects.get(id=order_id)#得到id
+    order_list1 = order.orderdetail_set.all()#查询详细的订单
+    return render(request,'store/show_order.html',locals())
+
 
 #删除订单
 def delete_order(request):
-   pass
+   order_id = request.GET.get('order_id')#获取订单的id
+   print(order_id)
+   print(type(order_id))
+   order = Order.objects.get(id=order_id)#查询对应的订单
+   order_list = order.orderdetail_set.all()#查询到对应的详细订单
+   for i in order_list:
+       i.delete()#循环删除
+   order.delete()#最后删除这个订单
+   return HttpResponseRedirect('/Store/order_list')
 #已处理订单列表
 def ok_order(request):
+    list_order3 = []
     store_id = request.COOKIES.get('has_store')  # 获取店铺id
     page_num = request.GET.get('page_num', 1)  # 获取页面
     keywords = request.GET.get('keyword', '')  # 实现模糊查找
     if keywords:
-        list_order = OrderDetail.objects.filter(order_id__order_status=3, goods_store=store_id,
-                                                goods_name__contains=keywords).order_by('-id')  # 查询订单付款的订单
-        # list_order1 = Order.objects.filter(store_id=list_order)
+        list_order1 = OrderDetail.objects.filter(order_id__order_status=3, goods_store=store_id,
+                                                 goods_name__contains=keywords).order_by('-id')  # 查询订单付款的订单
+        for i in list_order1:  # 循环查询的对象
+            if i.order_id not in list_order3:
+                list_order3.append(i.order_id)
     else:
-        list_order = OrderDetail.objects.filter(order_id__order_status=3, goods_store=store_id).order_by('-id')  # 查询订单付款的订单
-    paginator = Paginator(list_order, 6)  # 展示的内容和每一页展示的数据
+        list_order1 = OrderDetail.objects.filter(order_id__order_status=3, goods_store=store_id).order_by('-id') # 查询订单付款的订单对应店铺的id
+        for i in list_order1:  # 循环查询的对象
+            if i.order_id not in list_order3:
+                list_order3.append(i.order_id)
+    paginator = Paginator(list_order3, 6)  # 展示的内容和每一页展示的数据
     pages = paginator.count  # 获取数据的总条数
     list_sum = paginator.num_pages  # 总页数
 

@@ -8,7 +8,7 @@
         <thead>
                <tr>
                    <th>订单编号</th>
-                   <th>订单名称</th>
+                   <th>订单用户</th>
                    <th>订单价格</th>
                    <th>状态</th>
                </tr>
@@ -16,9 +16,9 @@
         <tbody>
                {% for order in page %}
                    <tr>
-                       <td>{{ order.order_id.order_id }}</td>
-                       <td>{{ order.goods_name }}</td>
-                       <td>{{ order.goods_total }}</td>
+                       <td><a href="/Store/show_order/?order_id={{ order.id }}">{{ order.order_id }}</a></td>
+                       <td>{{ order.order_user.username}}</td>
+                       <td>{{ order.order_price }}</td>
                        <td style="color: red">
                            等待发货
                        </td>
