@@ -124,6 +124,7 @@ def adds_car(request):
         cart.goods_id = goods_id#商品id
         cart.goods_store = goods.store_id.id#商店id
         cart.user_id = user_id#用户id
+        cart.goods_live = 0#购物车的状态
         cart.save()#保存数据
         result['status'] = 'success'
         result['data'] = '商品添加成功'
@@ -157,7 +158,7 @@ def list_add(request):
 #购物车功能
 def car(request):
     user_id = request.COOKIES.get('user_id')#获取用户id
-    goods_list = Cart.objects.filter(user_id=user_id)#获取购物车列表
+    goods_list = Cart.objects.filter(user_id=user_id,goods_live=0)#获取购物车列表
     h = [i.goods_total for i in goods_list]#循环购物车列表类
     money = sum(h)#计算总价钱
     number = len(goods_list)#统计商品个数
@@ -185,7 +186,7 @@ def car(request):
         order.save()
 
         #详细订单的保存
-        print(cart_data)
+        # print(cart_data)
         for detail in cart_data:
             order_detail = OrderDetail()
             order_detail.order_id = order#订单号
@@ -262,7 +263,7 @@ def pay_order(request):
             order = Order.objects.get(id=order_id)
             detail = order.orderdetail_set.all()
             user_id = request.COOKIES.get("user_id")
-            buyer = Buyer.objects.filter(id=user_id)  # 查找对应的用户
+            buyer = Buyer.objects.filter(id=user_id).first()  # 查找对应的用户
             adds_list = buyer.address_set.all()
             return render(request,'buyer/play_order.html',locals())
         else:
@@ -273,9 +274,9 @@ def pay_order(request):
 def pay_money(request):
     if request.method == "GET":
         order_id = request.GET.get('order')#得到订单号
-        money = request.GET.get('money')
-        order = Order.objects.get(order_id=order_id)
-        name = order.order_user.username
+        money = request.GET.get('money')#的钱数
+        order = Order.objects.get(order_id=order_id)#的到订单号
+        name = order.order_user.username#得到用户名
         alipay_public_key_string = """-----BEGIN PUBLIC KEY-----
         MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAw33Gh5+47xMbHRi2FbdBoxJpje8cWtherlkmLbqCn4n8Wgz5dcoCi6YS/hPHHTeqKf6gNw4BnlYEDizpP/SWjD0NyBszn1wuzMX9jF4YwJ/bWOtPaGa91Bu26AGVoyILPtvMIMCMHlrvEOWJ9qcn8Nhf9i3W2nC+eO9OSHE61M1EtosQsqByLck8YmmeuRpPAtU8avUgfuTIQtri3ik3aSjaiqLFpfrBaPL19S9Ax6nfC/ZiI3eof7G0Nph2lt73IrNqOpU226ZetLJyDYp0Ou8kt185tiSeEOKf/ydx83fcSGj99SwnK4xb18/aysJ/LoyMbaGdQ00g/3kQ5GprpQIDAQAB
         -----END PUBLIC KEY-----"""
@@ -304,6 +305,12 @@ def pay_money(request):
         order = Order.objects.get(order_id=order_id)#获取对应的订单实例
         order.order_status = 2
         order.save()#保存数据
+        orders_list = order.orderdetail_set.all()#查询所有的详细订单
+        for i in orders_list:
+            a = i.goods_name#获取对应的商品名称
+            card = Cart.objects.get(goods_name=a)
+            card.goods_live = 1#修改状态
+            card.save()#保存数据
 
         return HttpResponseRedirect("https://openapi.alipaydev.com/gateway.do?" + order_string)
 
@@ -469,6 +476,11 @@ def logout(request):
         response.delete_cookie(key)
     del request.session['username']
     return response
+
+#购物车的删除功能
+def delete_cart(request):
+    return HttpResponseRedirect('Buyer/')
+
 
 #模板页面
 def base(request):

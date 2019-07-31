@@ -2,10 +2,11 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="f789b425-f707-4f36-a688-e88c8546e301" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/Store/templates/store/ok_order.html" beforeDir="false" afterPath="$PROJECT_DIR$/Store/templates/store/ok_order.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Store/templates/store/order_list.html" beforeDir="false" afterPath="$PROJECT_DIR$/Store/templates/store/order_list.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Store/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/Store/urls.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Store/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/Store/views.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Buyer/migrations/0009_cart_goods_live.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Buyer/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/Buyer/models.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Buyer/templates/buyer/car.html" beforeDir="false" afterPath="$PROJECT_DIR$/Buyer/templates/buyer/car.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Buyer/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/Buyer/views.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/db.sqlite3" beforeDir="false" afterPath="$PROJECT_DIR$/db.sqlite3" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -59,66 +60,66 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/Buyer/models.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="162">
-              <caret line="33" column="9" lean-forward="true" selection-start-line="33" selection-start-column="9" selection-end-line="33" selection-end-column="9" />
+            <state relative-caret-position="351">
+              <caret line="13" column="8" selection-start-line="13" selection-start-column="8" selection-end-line="13" selection-end-column="8" />
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/Store/templates/store/order_list.html">
+        <entry file="file://$PROJECT_DIR$/Buyer/templates/buyer/play_order.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="394">
-              <caret line="23" column="107" selection-start-line="23" selection-start-column="107" selection-end-line="23" selection-end-column="107" />
-              <folding>
-                <element signature="e#1025#2740#0#HTML" />
-              </folding>
+            <state relative-caret-position="355">
+              <caret line="75" column="91" selection-start-line="75" selection-start-column="91" selection-end-line="75" selection-end-column="91" />
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/Store/views.py">
+        <entry file="file://$PROJECT_DIR$/Buyer/views.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="293">
-              <caret line="430" column="26" lean-forward="true" selection-start-line="430" selection-start-column="26" selection-end-line="430" selection-end-column="26" />
+            <state relative-caret-position="136">
+              <caret line="260" column="53" lean-forward="true" selection-start-line="260" selection-start-column="53" selection-end-line="260" selection-end-column="53" />
               <folding>
-                <element signature="e#0#14#0" expanded="true" />
-                <element signature="e#279#379#0" />
-                <element signature="e#415#806#0" />
-                <element signature="e#840#1344#0" />
-                <element signature="e#1377#2688#0" />
-                <element signature="e#2816#3284#0" />
-                <element signature="e#3339#4673#0" />
-                <element signature="e#4727#6019#0" />
-                <element signature="e#6067#7660#0" />
-                <element signature="e#7704#7813#0" />
-                <element signature="e#7860#8194#0" />
-                <element signature="e#8233#8351#0" />
-                <element signature="e#8401#9716#0" />
-                <element signature="e#9761#10318#0" />
-                <element signature="e#10365#10886#0" />
-                <element signature="e#10932#12426#0" />
-                <element signature="e#12464#12589#0" />
-                <element signature="e#12629#13991#0" />
-                <element signature="e#13997#14258#0" />
-                <element signature="e#14373#14686#0" />
-                <element signature="e#14634#16148#0" />
-                <element signature="e#15717#15849#0" />
-                <element signature="e#16054#16137#0" />
-                <element signature="e#16186#16263#0" />
+                <element signature="e#0#11#0" expanded="true" />
+                <element signature="e#3646#4484#0" />
+                <element signature="e#4525#5338#0" />
+                <element signature="e#7243#7403#0" />
+                <element signature="e#7459#7583#0" />
+                <element signature="e#9696#12953#0" />
+                <element signature="e#13014#13460#0" />
+                <element signature="e#15521#16477#0" />
+                <element signature="e#16524#17108#0" />
+                <element signature="e#17153#17929#0" />
+                <element signature="e#17973#18680#0" />
+                <element signature="e#18713#18886#0" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/Store/urls.py">
+        <entry file="file://$PROJECT_DIR$/Buyer/templates/buyer/car.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="189">
-              <caret line="22" column="33" selection-start-line="22" selection-start-column="23" selection-end-line="22" selection-end-column="33" />
+            <state relative-caret-position="287">
+              <caret line="49" column="58" selection-start-line="49" selection-start-column="58" selection-end-line="49" selection-end-column="58" />
               <folding>
-                <element signature="e#0#44#0" expanded="true" />
+                <element signature="e#2012#3219#0#HTML" />
+                <element signature="e#3220#4562#0#HTML" />
+                <element signature="e#4563#5890#0#HTML" />
+                <element signature="e#5891#6383#0#HTML" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/Buyer/urls.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="58">
+              <caret line="11" column="18" selection-start-line="11" selection-start-column="16" selection-end-line="11" selection-end-column="19" />
+              <folding>
+                <element signature="e#0#36#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -202,37 +203,37 @@
         <option value="$PROJECT_DIR$/Buyer/Alipay.py" />
         <option value="$PROJECT_DIR$/Store/templates/store/ok_orser.html" />
         <option value="$PROJECT_DIR$/Store/templates/store/blank.html" />
-        <option value="$PROJECT_DIR$/Buyer/models.py" />
         <option value="$PROJECT_DIR$/Buyer/templates/buyer/base.html" />
         <option value="$PROJECT_DIR$/Buyer/templates/buyer/index.html" />
         <option value="$PROJECT_DIR$/Buyer/static/buyer/css/main.css" />
-        <option value="$PROJECT_DIR$/Buyer/templates/buyer/play_order.html" />
         <option value="$PROJECT_DIR$/Buyer/templates/buyer/user_order.html" />
         <option value="$PROJECT_DIR$/static/buyer/css/main.css" />
         <option value="$PROJECT_DIR$/Buyer/templates/buyer/show_shop.html" />
         <option value="$PROJECT_DIR$/Buyer/templates/buyer/good_list.html" />
         <option value="$PROJECT_DIR$/Buyer/urls.py" />
-        <option value="$PROJECT_DIR$/Buyer/templates/buyer/car.html" />
-        <option value="$PROJECT_DIR$/Buyer/views.py" />
         <option value="$PROJECT_DIR$/Store/models.py" />
         <option value="$PROJECT_DIR$/Buyer/tests.py" />
         <option value="$PROJECT_DIR$/FreshShop/urls.py" />
         <option value="$PROJECT_DIR$/Store/serializers.py" />
         <option value="$PROJECT_DIR$/FreshShop/settings.py" />
         <option value="$PROJECT_DIR$/Store/templates/store/ajax_goods_list.html" />
-        <option value="$PROJECT_DIR$/../README.md" />
         <option value="$APPLICATION_CONFIG_DIR$/consoles/.datagrid/cell" />
         <option value="$PROJECT_DIR$/Store/urls.py" />
         <option value="$PROJECT_DIR$/Store/templates/store/order_list.html" />
         <option value="$PROJECT_DIR$/Store/templates/store/show_order.html" />
         <option value="$PROJECT_DIR$/Store/templates/store/ok_order.html" />
         <option value="$PROJECT_DIR$/Store/views.py" />
+        <option value="$PROJECT_DIR$/../README.md" />
+        <option value="$PROJECT_DIR$/Buyer/models.py" />
+        <option value="$PROJECT_DIR$/Buyer/templates/buyer/car.html" />
+        <option value="$PROJECT_DIR$/Buyer/templates/buyer/play_order.html" />
+        <option value="$PROJECT_DIR$/Buyer/views.py" />
       </list>
     </option>
   </component>
   <component name="ProjectFrameBounds" extendedState="6">
-    <option name="x" value="425" />
-    <option name="y" value="7" />
+    <option name="x" value="537" />
+    <option name="y" value="60" />
     <option name="width" value="794" />
     <option name="height" value="651" />
   </component>
@@ -257,6 +258,19 @@
             <path>
               <item name="FreshShop" type="b2602c69:ProjectViewProjectNode" />
               <item name="FreshShop" type="462c0819:PsiDirectoryNode" />
+              <item name="Buyer" type="462c0819:PsiDirectoryNode" />
+              <item name="templates" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="FreshShop" type="b2602c69:ProjectViewProjectNode" />
+              <item name="FreshShop" type="462c0819:PsiDirectoryNode" />
+              <item name="Buyer" type="462c0819:PsiDirectoryNode" />
+              <item name="templates" type="462c0819:PsiDirectoryNode" />
+              <item name="buyer" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="FreshShop" type="b2602c69:ProjectViewProjectNode" />
+              <item name="FreshShop" type="462c0819:PsiDirectoryNode" />
               <item name="FreshShop" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
@@ -267,20 +281,13 @@
             <path>
               <item name="FreshShop" type="b2602c69:ProjectViewProjectNode" />
               <item name="FreshShop" type="462c0819:PsiDirectoryNode" />
-              <item name="Store" type="462c0819:PsiDirectoryNode" />
+              <item name="static" type="462c0819:PsiDirectoryNode" />
+              <item name="buyer" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="FreshShop" type="b2602c69:ProjectViewProjectNode" />
               <item name="FreshShop" type="462c0819:PsiDirectoryNode" />
               <item name="Store" type="462c0819:PsiDirectoryNode" />
-              <item name="templates" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="FreshShop" type="b2602c69:ProjectViewProjectNode" />
-              <item name="FreshShop" type="462c0819:PsiDirectoryNode" />
-              <item name="Store" type="462c0819:PsiDirectoryNode" />
-              <item name="templates" type="462c0819:PsiDirectoryNode" />
-              <item name="store" type="462c0819:PsiDirectoryNode" />
             </path>
           </expand>
           <select />
@@ -303,11 +310,11 @@
       <recent name="D:\DjangoShopProject\DjangoShop\FreshShop\Store\static\store\js" />
     </key>
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="D:\DjangoShopProject\DjangoShop\FreshShop\static\buyer\images" />
+      <recent name="D:\DjangoShopProject\DjangoShop\FreshShop\Buyer\static\buyer\images" />
       <recent name="D:\DjangoShopProject\DjangoShop\FreshShop\Buyer\templates\buyer" />
       <recent name="D:\DjangoShopProject\DjangoShop\FreshShop\Buyer\static\buyer\js" />
       <recent name="D:\DjangoShopProject\DjangoShop\FreshShop\static\buyer\js" />
-      <recent name="D:\DjangoShopProject\DjangoShop\FreshShop\static" />
-      <recent name="D:\DjangoShopProject\DjangoShop\FreshShop\static\store\js" />
     </key>
   </component>
   <component name="RunDashboard">
@@ -417,27 +424,27 @@
       <workItem from="1564306134763" duration="23098000" />
       <workItem from="1564361378884" duration="41867000" />
       <workItem from="1564447230199" duration="36935000" />
-      <workItem from="1564531829440" duration="31595000" />
+      <workItem from="1564531829440" duration="37906000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="333071000" />
+    <option name="totallyTimeSpent" value="339382000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1382" height="784" extended-state="6" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" sideWeight="0.49923196" visible="true" weight="0.1603631" />
+      <window_info content_ui="combo" id="Project" order="0" sideWeight="0.49923196" weight="0.1603631" />
       <window_info id="Structure" order="1" sideWeight="0.50076807" side_tool="true" weight="0.090771556" />
       <window_info id="Favorites" order="2" sideWeight="0.50076807" side_tool="true" weight="0.090771556" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" />
-      <window_info active="true" anchor="bottom" id="Run" order="2" sideWeight="0.49924356" visible="true" weight="0.09984639" />
+      <window_info active="true" anchor="bottom" id="Run" order="2" sideWeight="0.49924356" visible="true" weight="0.13517666" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.04608295" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="bottom" id="TODO" order="6" />
-      <window_info anchor="bottom" id="manage.py@FreshShop" order="7" weight="0.55877614" />
+      <window_info anchor="bottom" id="manage.py@FreshShop" order="7" weight="0.04608295" />
       <window_info anchor="bottom" id="Database Console" order="8" weight="0.31643626" />
       <window_info anchor="bottom" id="Docker" order="9" show_stripe_button="false" />
       <window_info anchor="bottom" id="Version Control" order="10" />
@@ -449,7 +456,7 @@
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
       <window_info anchor="right" id="SciView" order="3" />
-      <window_info anchor="right" id="Database" order="4" weight="0.17019667" />
+      <window_info anchor="right" id="Database" order="4" visible="true" weight="0.17019667" />
     </layout>
     <layout-to-restore>
       <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.17029549" />
@@ -559,13 +566,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Buyer/templates/buyer/base.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="106">
-          <caret line="36" column="40" lean-forward="true" selection-start-line="36" selection-start-column="29" selection-end-line="36" selection-end-column="40" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/Buyer/templates/buyer/user_order.html">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="243">
@@ -610,16 +610,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Buyer/urls.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="382">
-          <caret line="26" column="3" selection-start-line="26" selection-start-column="3" selection-end-line="26" selection-end-column="3" />
-          <folding>
-            <element signature="e#0#36#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/Store/templates/store/goods.html">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="513">
@@ -648,35 +638,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="27">
           <caret line="1" lean-forward="true" selection-start-line="1" selection-end-line="1" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Buyer/views.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-60">
-          <caret line="199" column="54" selection-start-line="199" selection-start-column="54" selection-end-line="199" selection-end-column="54" />
-          <folding>
-            <element signature="e#0#11#0" expanded="true" />
-            <element signature="e#3646#4484#0" />
-            <element signature="e#4525#5338#0" />
-            <element signature="e#7195#7355#0" />
-            <element signature="e#7411#7535#0" />
-            <element signature="e#9654#12911#0" />
-            <element signature="e#12972#13418#0" />
-            <element signature="e#13477#15429#0" />
-            <element signature="e#15479#16435#0" />
-            <element signature="e#16482#17066#0" />
-            <element signature="e#17111#17887#0" />
-            <element signature="e#17931#18638#0" />
-            <element signature="e#18671#18844#0" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Buyer/templates/buyer/car.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="27">
-          <caret line="22" selection-start-line="22" selection-end-line="22" />
         </state>
       </provider>
     </entry>
@@ -721,27 +682,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/../README.md">
-      <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
-        <state split_layout="SPLIT">
-          <first_editor relative-caret-position="451">
-            <caret line="70" column="10" selection-start-line="70" selection-end-line="70" selection-end-column="10" />
-          </first_editor>
-          <second_editor />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/Store/templates/store/ajax_goods_list.html">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="1218">
           <caret line="104" column="49" selection-start-line="104" selection-start-column="49" selection-end-line="104" selection-end-column="49" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Buyer/templates/buyer/play_order.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-1134">
-          <caret line="18" column="41" selection-start-line="18" selection-start-column="41" selection-end-line="18" selection-end-column="41" />
         </state>
       </provider>
     </entry>
@@ -767,13 +711,6 @@
           <folding>
             <element signature="n#if#1;n#!!top" />
           </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Buyer/models.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="162">
-          <caret line="33" column="9" lean-forward="true" selection-start-line="33" selection-start-column="9" selection-end-line="33" selection-end-column="9" />
         </state>
       </provider>
     </entry>
@@ -804,16 +741,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Store/templates/store/order_list.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="394">
-          <caret line="23" column="107" selection-start-line="23" selection-start-column="107" selection-end-line="23" selection-end-column="107" />
-          <folding>
-            <element signature="e#1025#2740#0#HTML" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/Store/urls.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="189">
@@ -824,31 +751,40 @@
         </state>
       </provider>
     </entry>
-    <entry file="das://c59c4a58-c26c-42df-9ff5-cbc7484efb85/schema/main/table/Buyer_orderdetail">
-      <provider selected="true" editor-type-id="com.intellij.database.editor.DatabaseTableFileEditorProvider">
-        <state>
-          <filtering enabled="true" />
+    <entry file="file://$PROJECT_DIR$/../README.md">
+      <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
+        <state split_layout="SPLIT">
+          <first_editor relative-caret-position="278">
+            <caret line="71" column="11" selection-start-line="71" selection-end-line="71" selection-end-column="11" />
+          </first_editor>
+          <second_editor />
         </state>
       </provider>
     </entry>
-    <entry file="das://c59c4a58-c26c-42df-9ff5-cbc7484efb85/schema/main/table/Buyer_order">
-      <provider selected="true" editor-type-id="com.intellij.database.editor.DatabaseTableFileEditorProvider">
-        <state>
-          <filtering enabled="true" />
+    <entry file="file://$PROJECT_DIR$/Store/templates/store/order_list.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="394">
+          <caret line="23" column="107" selection-start-line="23" selection-start-column="107" selection-end-line="23" selection-end-column="107" />
+          <folding>
+            <element signature="e#1025#2740#0#HTML" />
+          </folding>
         </state>
       </provider>
     </entry>
-    <entry file="das://c59c4a58-c26c-42df-9ff5-cbc7484efb85/schema/main/table/Buyer_cart">
-      <provider selected="true" editor-type-id="com.intellij.database.editor.DatabaseTableFileEditorProvider">
-        <state>
-          <filtering enabled="true" />
+    <entry file="file://$PROJECT_DIR$/Buyer/urls.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="58">
+          <caret line="11" column="18" selection-start-line="11" selection-start-column="16" selection-end-line="11" selection-end-column="19" />
+          <folding>
+            <element signature="e#0#36#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/Store/views.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="293">
-          <caret line="430" column="26" lean-forward="true" selection-start-line="430" selection-start-column="26" selection-end-line="430" selection-end-column="26" />
+        <state relative-caret-position="75">
+          <caret line="364" column="24" selection-start-line="364" selection-start-column="24" selection-end-line="364" selection-end-column="24" />
           <folding>
             <element signature="e#0#14#0" expanded="true" />
             <element signature="e#279#379#0" />
@@ -867,13 +803,83 @@
             <element signature="e#10365#10886#0" />
             <element signature="e#10932#12426#0" />
             <element signature="e#12464#12589#0" />
-            <element signature="e#12629#13991#0" />
-            <element signature="e#13997#14258#0" />
-            <element signature="e#14373#14686#0" />
-            <element signature="e#14634#16148#0" />
-            <element signature="e#15717#15849#0" />
-            <element signature="e#16054#16137#0" />
-            <element signature="e#16186#16263#0" />
+            <element signature="e#12629#14074#0" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Buyer/templates/buyer/base.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="972">
+          <caret line="36" column="40" lean-forward="true" selection-start-line="36" selection-start-column="29" selection-end-line="36" selection-end-column="40" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Buyer/templates/buyer/play_order.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="355">
+          <caret line="75" column="91" selection-start-line="75" selection-start-column="91" selection-end-line="75" selection-end-column="91" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Buyer/templates/buyer/car.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="287">
+          <caret line="49" column="58" selection-start-line="49" selection-start-column="58" selection-end-line="49" selection-end-column="58" />
+          <folding>
+            <element signature="e#2012#3219#0#HTML" />
+            <element signature="e#3220#4562#0#HTML" />
+            <element signature="e#4563#5890#0#HTML" />
+            <element signature="e#5891#6383#0#HTML" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Buyer/models.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="351">
+          <caret line="13" column="8" selection-start-line="13" selection-start-column="8" selection-end-line="13" selection-end-column="8" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="das://c59c4a58-c26c-42df-9ff5-cbc7484efb85/schema/main/table/Buyer_cart">
+      <provider selected="true" editor-type-id="com.intellij.database.editor.DatabaseTableFileEditorProvider">
+        <state>
+          <filtering enabled="true" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="das://c59c4a58-c26c-42df-9ff5-cbc7484efb85/schema/main/table/Buyer_order">
+      <provider selected="true" editor-type-id="com.intellij.database.editor.DatabaseTableFileEditorProvider">
+        <state>
+          <filtering enabled="true" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="das://c59c4a58-c26c-42df-9ff5-cbc7484efb85/schema/main/table/Buyer_orderdetail">
+      <provider selected="true" editor-type-id="com.intellij.database.editor.DatabaseTableFileEditorProvider">
+        <state>
+          <filtering enabled="true" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Buyer/views.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="136">
+          <caret line="260" column="53" lean-forward="true" selection-start-line="260" selection-start-column="53" selection-end-line="260" selection-end-column="53" />
+          <folding>
+            <element signature="e#0#11#0" expanded="true" />
+            <element signature="e#3646#4484#0" />
+            <element signature="e#4525#5338#0" />
+            <element signature="e#7243#7403#0" />
+            <element signature="e#7459#7583#0" />
+            <element signature="e#9696#12953#0" />
+            <element signature="e#13014#13460#0" />
+            <element signature="e#15521#16477#0" />
+            <element signature="e#16524#17108#0" />
+            <element signature="e#17153#17929#0" />
+            <element signature="e#17973#18680#0" />
+            <element signature="e#18713#18886#0" />
           </folding>
         </state>
       </provider>

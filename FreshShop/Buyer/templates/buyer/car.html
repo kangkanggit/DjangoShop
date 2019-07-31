@@ -11,6 +11,7 @@
 {% endblock %}
 
 {% block content %}
+    {% if goods_list %}
 <div class="total_count">全部商品<em>{{ number }}</em>件</div>
 	<ul class="cart_list_th clearfix">
 		<li class="col01">商品名称</li>
@@ -49,6 +50,9 @@
 		<li class="col04" ><input type="submit" value="去结算"></li>
 	</ul>
      </form>
+    {% else %}
+        <img style="width: 500px;height: 500px" src="/static/buyer/images/kk.jpeg">
+    {% endif %}
 {% endblock %}
 
 {% block script %}

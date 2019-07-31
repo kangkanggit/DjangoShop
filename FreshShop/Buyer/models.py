@@ -51,6 +51,7 @@ class Cart(models.Model):
     goods_id = models.IntegerField(verbose_name='商品id')
     goods_store = models.IntegerField(verbose_name='商品商店')
     user_id = models.IntegerField(verbose_name='用户id')
+    goods_live = models.IntegerField(default=0,verbose_name='购物车的状态')
 
 
 
