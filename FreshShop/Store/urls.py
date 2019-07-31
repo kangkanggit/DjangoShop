@@ -24,4 +24,5 @@ urlpatterns = [
     path('confirm/',confirm),#确认订单
     path('ok_order/',ok_order),#已处理订单页面
     path('delete_order/', delete_order),  # 删除订单
+    path('ajd/',ajax_goods_list),#vu测试
 ]

@@ -458,4 +458,23 @@ def login_out(request):
     for i in request.COOKIES:
         response.delete_cookie(i)
     return response
+
+def ajax_goods_list(request):
+    return render(request,'store/ajax_goods_list.html')
+
+
+from rest_framework import viewsets
+from Store.serializers import *
+
+class UserViewSet(viewsets.ModelViewSet):
+    #返回具体查询的内容
+    queryset = Goods.objects.all()
+    serializer_class = UserSerializer
+
+
+class TypeViewSet(viewsets.ModelViewSet):
+    queryset = GoodsType.objects.all()
+    serializer_class = GoodsTypeSerializer
+
+
 # Create your views here.
