@@ -164,22 +164,23 @@ def car(request):
 
     if request.method == "POST":
         post_data = request.POST
-        print(post_data)
+        # print(post_data)
         cart_data = [] #收集商品
         for k,v in post_data.items():
             if k.startswith('goods_'):
-                print(v)
+                # print(k)
+                # print(v)
                 cart_data.append(Cart.objects.get(id=int(v)))
-        print(cart_data)
+        # print(cart_data)
         goods_count = len(cart_data)#获取数据的数据
         goods_total = sum([int(i.goods_total) for i in cart_data])#订单和
         #保存订单
         order = Order()
         order.order_id = setOrder_id(str(user_id),str(goods_count),'3')
         # 订单当中有多个商品或者多个店铺，使用goods_count来代替商品id，
-        order.goods_count = goods_count
-        order.order_user = Buyer.objects.get(id=user_id)
-        order.order_price = goods_total
+        order.goods_count = goods_count#商品总数
+        order.order_user = Buyer.objects.get(id=user_id)#用户id
+        order.order_price = goods_total#商品总价
         order.order_status =1
         order.save()
 
@@ -260,9 +261,9 @@ def pay_order(request):
         if order_id:
             order = Order.objects.get(id=order_id)
             detail = order.orderdetail_set.all()
-            # user_id = request.COOKIES.get("user_id")
-            # buyer = Buyer.objects.filter(id=user_id)  # 查找对应的用户
-            # adds_list = buyer.address_set.all()
+            user_id = request.COOKIES.get("user_id")
+            buyer = Buyer.objects.filter(id=user_id)  # 查找对应的用户
+            adds_list = buyer.address_set.all()
             return render(request,'buyer/play_order.html',locals())
         else:
             return HttpResponse("非法请求，程序员在加班写这个功能中")

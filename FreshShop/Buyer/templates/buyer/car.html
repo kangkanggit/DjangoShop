@@ -25,7 +25,7 @@
     {% csrf_token %}
     {% for goods in goods_list %}
     <ul class="cart_list_td clearfix">
-		<li class="col01"><input type="checkbox" name="{{ goods.id }}" id="goods_{{ goods.id }}" class="goods_check"  value="{{ goods.id }}" checked></li>
+		<li class="col01"><input type="checkbox" name="goods_{{ goods.id }}"  class="goods_check"  value="{{ goods.id }}" checked></li>
 		<li class="col02"><img src="/static/{{ goods.goods_picture }}"></li>
 		<li class="col03">{{ goods.goods_name }}<br><em>{{ goods.goods_price }}元/500g</em></li>
 		<li class="col04">500g</li>
@@ -34,7 +34,6 @@
 			<div class="num_add">
 				<a href="#" class="add fl" onclick="return false" id="add">+</a>
 				<input type="text" class="num_show fl" name="number" id="number" value="{{ goods.goods_number }}">
-                <input type="hidden" id="goods_id" name="goods_id" value="{{ goods.id }}">
 				<a href="#" onclick="return false" class="minus fl" id="minus">-</a>
 			</div>
 		</li>
