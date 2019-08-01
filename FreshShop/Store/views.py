@@ -330,7 +330,7 @@ def add_goodsType(request):
         good_list = GoodsType.objects.filter(goods_name__contains=keywords).order_by('-id')  # 从数据库中模糊查找
     else:
         good_list = GoodsType.objects.all().order_by('-id')  # 展示所有
-    paginator = Paginator(good_list, 6)  # 展示的内容和每一页展示的数据
+    paginator = Paginator(good_list, 3)  # 展示的内容和每一页展示的数据
     pages = paginator.count  # 获取数据的总条数
     list_sum = paginator.num_pages  # 总页数
 
@@ -490,11 +490,16 @@ def ajax_goods_list(request):
 
 from rest_framework import viewsets
 from Store.serializers import *
+from django_filters.rest_framework import DjangoFilterBackend#导入过滤器
 
 class UserViewSet(viewsets.ModelViewSet):
     #返回具体查询的内容
-    queryset = Goods.objects.all()
-    serializer_class = UserSerializer
+    queryset = Goods.objects.all()#具体数据
+    serializer_class = UserSerializer#指定过滤的类
+
+    filter_backends = [DjangoFilterBackend]#采用那个过滤器
+    filterset_fields = {'goods_name','goods_price'}#进行查询的字段
+
 
 
 class TypeViewSet(viewsets.ModelViewSet):

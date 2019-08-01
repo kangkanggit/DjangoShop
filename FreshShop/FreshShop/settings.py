@@ -144,8 +144,14 @@ CKEDITOR_IMAGE_BACKEND = 'pillow'
 
 REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES':[
-        'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly'
+        'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly'#权限
     ],
-    'DEFAULT_PAGINATION_CLASS':'rest_framework.pagination.PageNumberPagination',
-    'PAGE_SIZE' :3
+    'DEFAULT_PAGINATION_CLASS':'rest_framework.pagination.PageNumberPagination',#分页
+    'PAGE_SIZE' :3,
+    'DEFAULT_RENDERER_CLASSES':(
+        'utils.rendererresponse.Customrenderer',#自定义
+    ),
+    'DEFAULT_FILTER_BACKENDS':(
+        'django_filters.rest_framework.DjangoFilterBackend',#过滤器
+    )
 }

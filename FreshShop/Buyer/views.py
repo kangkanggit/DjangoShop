@@ -45,6 +45,7 @@ def index(request):
     result_list = []
     count = 1
     goods_list_type = GoodsType.objects.all()#查询所有的类型
+
     for goods_type in goods_list_type:#遍历每一个类型
         goods_list = goods_type.goods_set.values()[:4]#查询4条语句
         if goods_list:#判断是否有类型
