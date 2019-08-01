@@ -1,0 +1,41 @@
+{% extends 'buyer/base.html' %}
+
+{% block title %}
+    用户中心——订单页面
+{% endblock %}
+{% block name %}<div class="sub_page_name fl">|&nbsp;&nbsp;&nbsp;&nbsp;详细订单</div>{% endblock %}
+{% block content %}
+
+	<div class="main_con clearfix">
+		<div class="left_menu_con clearfix">
+			<h3>用户中心</h3>
+			<ul>
+				<li><a href="/Buyer/user_infor/" >· 个人信息</a></li>
+				<li><a href="/Buyer/user_order/" class="active">· 全部订单</a></li>
+				<li><a href="/Buyer/user_site/">· 收货地址</a></li>
+			</ul>
+		</div>
+		<div class="right_content clearfix">
+				<h3 class="common_title2">订单详细</h3>
+            <table class="order_list_table w980">
+                {% for foo1 in order_list %}
+                    <tbody>
+                    <tr>
+                        <td width="55%">
+                            <ul class="order_goods_list clearfix">
+                                <li class="col01"><img src="/static/{{ foo1.goods_image }}"></li>
+                                <li class="col02">{{ foo1.goods_name }}<em>{{ foo1.goods_price }}元/500g</em></li>
+                                <li class="col03">{{ foo1.goods_number }}</li>
+                                <li class="col04" >{{ foo1.goods_price }}元</li>
+                            </ul>
+                        </td>
+                        <td width="15%" style="color: red">{{ foo1.goods_price }}元</td>
+                        <td width="15%"><a href="/Buyer/user_order/" class="oper_btn">返回</a></td>
+
+                    </tr>
+                    </tbody>
+                   {% endfor %}
+            </table>
+		</div>
+	</div>
+{% endblock %}

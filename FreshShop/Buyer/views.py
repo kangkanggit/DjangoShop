@@ -100,9 +100,9 @@ def show_goodlists(request):
     goodslist = []
     type_id = request.GET.get('type_id')
     goods_type = GoodsType.objects.filter(id=type_id).first()#查找对应的类型
-    if goods_type:#如果存在
+    if goods_type:#如果存在goods_under商品的状态
         goods_list = goods_type.goods_set.filter(goods_under=1)#返回在线的商品
-        goods_first = goods_type.goods_set.filter(goods_under=1).first()#返回第一个商品
+        goods_first = goods_type.goods_set.filter(goods_under=1).order_by('-id').first()#返回第一个商品
     return render(request,'buyer/good_list.html',locals())
 
 
@@ -308,11 +308,9 @@ def pay_money(request):
         order.save()#保存数据
         orders_list = order.orderdetail_set.all()#查询所有的详细订单
         for i in orders_list:
-            a = i.goods_name#获取对应的商品名称
-            card = Cart.objects.get(goods_name=a)
-            card.goods_live = 1#修改状态
-            card.save()#保存数据
-
+            a = i.goods_id#获取对应的商品名称
+            print(type(a))
+            card = Cart.objects.filter(goods_id=a)
         return HttpResponseRedirect("https://openapi.alipaydev.com/gateway.do?" + order_string)
 
 
@@ -333,55 +331,49 @@ def user_infor(request):
     return render(request,'buyer/user_infor.html',{'result':result})
 
 
+#获取订单时间的函数
+def times(order):
+    a = order.order_id
+    c = a[:14]
+    order_time = c[:4] + '-' + c[4:6] + '-' + c[6:8] + ' ' + c[8:10] + ':' + c[10:12] + ':' + c[12:]  # 生成订单时间
+    return order_time
+
 #编写订单页面(需要开发)
 @loginValid
 def user_order(request):
-
+    list1 =[]
     k_user = request.COOKIES.get('username')
     s_user = request.session.get('username')
-    if k_user == s_user:
+    if k_user == s_user:#为了保持是当前的用户
         user = request.COOKIES.get('user_id')#获取用户的id
         #未支付订单
-        order_id2 = Order.objects.filter(order_status=1, order_user=user)  # 查询等于3的订单表
+        order_id2 = Order.objects.filter(order_status=1, order_user=user)  # 查询等于1的订单表总的
         if order_id2:
-            for i in order_id2 :
-                if i:
-                    order2 = Order.objects.filter(id=i.id).first()
-                    show_list2 = order2.orderdetail_set.all()
-                    for s in show_list2:
-                        a = order2.order_id
-                        c = a[:14]
-                        result2 = c[:4] + '-' + c[4:6] + '-' + c[6:8] + ' ' + c[8:10] + ':' + c[10:12] + ':' + c[12:]  # 生成订单时间
-
+            for i in order_id2 :#获取总订单单个对象
+                result2 = times(i)#获取时间
+                # print(h)
         #发货订单
         order_id = Order.objects.filter(order_status=3,order_user=user)#查询等于3的订单表
         if order_id:
-            for i in order_id :
-                if i:
-                    order = Order.objects.filter(id=i.id).first()
-                    show_list = order.orderdetail_set.all()
-                    for s in show_list:
-                        a= order.order_id
-                        c= a[:14]
-                        result = c[:4]+'-'+c[4:6]+'-'+c[6:8]+' '+c[8:10]+':'+c[10:12]+':'+c[12:]#生成订单时间
-
-
+            for i in order_id:  # 获取总订单单个对象
+                result = times(i)  # 获取时间
         #没发货订单
-        order_id1 = Order.objects.filter(order_status=2,order_user=user)#查询等于3的订单表
+        order_id1 = Order.objects.filter(order_status=2,order_user=user)#查询等于2的订单表
         if order_id1:
-            for i in order_id1 :
-                if i:
-                    order1 = Order.objects.filter(id=i.id).first()#查询订单表
-                    show_list1 = order1.orderdetail_set.all()
-                    print(show_list1)
-                    for h in show_list1:
+            for i in order_id1:  # 获取总订单单个对象
+                result1 = times(i)  # 获取时间
 
-                        a= order1.order_id
-                        c= a[:14]
-                        result1 = c[:4]+'-'+c[4:6]+'-'+c[6:8]+' '+c[8:10]+':'+c[10:12]+':'+c[12:]#生成订单时间
         #查询支付成功的订单表，并且店家确认的商品
         return render(request,'buyer/user_order.html',locals())
     return render(request,'buyer/index.html')
+
+#详细订单
+def show_order(request):
+    order_id = request.GET.get('order_id')#获取订单的id
+    order = Order.objects.get(id=order_id)#查询对应的订单
+    order_list = order.orderdetail_set.all()
+    return render(request,'buyer/user_show_order.html',locals())
+
 
 #收货地址页面
 @loginValid

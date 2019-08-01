@@ -24,6 +24,7 @@ urlpatterns +=[
     path('ajax_register/',ajax_register),#ajax的前端注册验证
     path('adds_car/',adds_car),#加入购物车功能
     path('list_add/',list_add),#列表表页加入购物车功能
+    path('show_order/',show_order),#详细订单
 
 
 ]

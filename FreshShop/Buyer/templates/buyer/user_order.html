@@ -7,112 +7,106 @@
 {% block content %}
 
 	<div class="main_con clearfix">
-		<div class="left_menu_con clearfix">
+        <div class="right_content clearfix">
+            <h3 class="common_title2">全部订单</h3>
+            {% if order_id2 %}
+                {% for i in order_id2 %}
+                    <ul class="order_list_th w978 clearfix">
+                        <li class="col01">{{ result2 }}</li>
+                        <li class="col02">订单号：{{ i.order_id }}</li>
+                        <li class="col02 stress">未支付</li>
+                    </ul>
+
+                    <table class="order_list_table w980">
+                        <tbody>
+                        <tr>
+                            <td width="55%">
+                                <ul class="order_goods_list clearfix">
+                                    <li class="col01">数量为:{{ i.goods_count }}</li>
+                                    <li class="col02">用户:{{ i.order_user.username }}
+                                    <li style="color: red" class="col03">{{ i.order_price }}元</li>
+                                </ul>
+                            </td>
+                            <td width="15%">待付款</td>
+                            <td width="15%"><a href="/Buyer/show_order/?order_id={{ i.id }}" class="oper_btn ">查看订单详细</a></td>
+                            <td width="15%"><a href="/Buyer/pay_money/?money={{ i.order_price }}&order={{ i.order_id }}" class="oper_btn">去付款</a></td>
+                        </tr>
+                        </tbody>
+                    </table>
+                {% endfor %}
+            {% else %}
+            {% endif %}
+            {% if order_id %}
+              {% for i in order_id %}
+                <ul class="order_list_th w978 clearfix">
+                    <li class="col01">{{ result }}</li>
+                    <li class="col02">订单号：{{ i.order_id }}</li>
+                    <li class="col02 stress">已支付</li>
+                </ul>
+                    <table class="order_list_table w980">
+                    <tbody>
+                    <tr>
+                        <td width="55%">
+
+                            <ul class="order_goods_list clearfix">
+                                <li class="col01">数量为:{{ i.goods_count }}</li>
+                                <li class="col02">用户:{{ i.order_user.username }}
+                                <li class="col03" style="color: red">{{ i.order_price }}元</li>
+                            </ul>
+
+                        </td>
+                        <td width="15%">已发货</td>
+                        <td width="15%"><a href="/Buyer/show_order/?order_id={{ i.id }}" class="oper_btn">查看订单详细</a></td>
+
+                    </tr>
+                    </tbody>
+                </table>
+              {% endfor %}
+            {% else %}
+            {% endif %}
+            {% if order_id1 %}
+                 {% for i in order_id1 %}
+                        <ul class="order_list_th w978 clearfix">
+                            <li class="col01">{{ result1 }}</li>
+                            <li class="col02">订单号：{{ i.order_id }}</li>
+                            <li class="col02 stress">已支付</li>
+                        </ul>
+                        <table class="order_list_table w980">
+
+                        <tbody>
+                        <tr>
+                            <td width="55%">
+                                <ul class="order_goods_list clearfix">
+                                    <li class="col01">数量为:{{ i.goods_count }}</li>
+                                    <li class="col02">用户:{{ i.order_user.username }}
+                                    <li class="col03" style="color:red;">{{ i.order_price }}元</li>
+                                </ul>
+                            </td>
+                            <td width="15%">等待发货</td>
+                            <td width="15%"><a href="/Buyer/show_order/?order_id={{ i.id }}" class="oper_btn">查看订单详细</a></td>
+                        </tr>
+                        </tbody>
+                        </table>
+                 {% endfor %}
+            {% else %}
+            {% endif %}
+            <div class="pagenation">
+                <a href="#">上一页</a>
+                <a href="#" class="active">1</a>
+                <a href="#">2</a>
+                <a href="#">3</a>
+                <a href="#">4</a>
+                <a href="#">5</a>
+                <a href="#">下一页></a>
+            </div>
+        </div>
+        <div class="left_menu_con clearfix">
 			<h3>用户中心</h3>
 			<ul>
 				<li><a href="/Buyer/user_infor/" >· 个人信息</a></li>
 				<li><a href="/Buyer/user_order/" class="active">· 全部订单</a></li>
 				<li><a href="/Buyer/user_site/">· 收货地址</a></li>
 			</ul>
-		</div>
-		<div class="right_content clearfix">
-				<h3 class="common_title2">全部订单</h3>
-                {% if order_id2 %}
-				<ul class="order_list_th w978 clearfix">
-					<li class="col01">{{ result2 }}</li>
-					<li class="col02">订单号：{{ order2.order_id }}</li>
-					<li class="col02 stress">未支付</li>
-				</ul>
-
-				<table class="order_list_table w980">
-                    {% for foo1 in show_list2 %}
-					<tbody>
-						<tr>
-							<td width="55%">
-								<ul class="order_goods_list clearfix">
-									<li class="col01"><img src="/static/{{ foo1.goods_image }}"></li>
-									<li class="col02">{{ foo1.goods_name }}<em>{{ foo1.goods_price }}元/500g</em></li>
-									<li class="col03">{{ foo1.goods_number }}</li>
-									<li class="col04">{{ foo1.goods_price }}元</li>
-								</ul>
-							</td>
-							<td width="15%">{{ order2.order_price }}元</td>
-							<td width="15%">待付款</td>
-							<td width="15%"><a href="/Buyer/pay_money/?money={{ order2.order_price }}&order={{ order2.order_id }}" class="oper_btn">去付款</a></td>
-						</tr>
-					</tbody>
-                   {% endfor %}
-				</table>
-
-                {% else %}
-                {% endif %}
-                {% if order_id1 %}
-                <ul class="order_list_th w978 clearfix">
-					<li class="col01">{{ result1 }}</li>
-					<li class="col02">订单号：{{ order1.order_id }}</li>
-					<li class="col02 stress">已支付</li>
-				</ul>
-				<table class="order_list_table w980">
-                    {% for foo in show_list1 %}
-                        <tbody>
-						<tr>
-							<td width="55%">
-
-								<ul class="order_goods_list clearfix">
-									<li class="col01"><img src="/static/{{ foo.goods_image }}"></li>
-									<li class="col02">{{ foo.goods_name }}<em>{{ foo.goods_price }}元/500g</em></li>
-									<li class="col03">{{ foo.goods_number }}</li>
-									<li class="col04">{{ foo.goods_price }}元</li>
-								</ul>
-
-							</td>
-							<td width="15%">{{ order1.order_price }}元</td>
-							<td width="15%">已付款</td>
-							<td width="15%"><a href="#" class="oper_btn">等待发货</a></td>
-
-                        </tr>
-					</tbody>
-                    {% endfor %}
-                </table>
-                {% else %}
-                {% endif %}
-                {% if order_id %}
-				<ul class="order_list_th w978 clearfix">
-					<li class="col01">{{ result }}</li>
-					<li class="col02">订单号：{{ order.order_id }}</li>
-					<li class="col02 stress">已支付</li>
-				</ul>
-				<table class="order_list_table w980">
-                        {% for foo in show_list %}
-                        <tbody>
-                        <tr>
-                                <td width="55%">
-								<ul class="order_goods_list clearfix">
-									<li class="col01"><img src="/static/{{ foo.goods_image }}"></li>
-									<li class="col02">{{ foo.goods_name }}<em>{{ foo.goods_price }}元/500g</em></li>
-									<li class="col03">{{ foo.goods_number }}</li>
-									<li class="col04">{{ foo.goods_price }}元</li>
-								</ul>
-							</td>
-
-                            <td width="15%">{{ order.order_price }}元</td>
-							<td width="15%">已付款</td>
-							<td width="15%"><a href="#" class="oper_btn">查看物流</a></td>
-                        </tr>
-					</tbody>
-                    {% endfor %}
-                </table>
-                {% else %}
-                {% endif %}
-				<div class="pagenation">
-					<a href="#">上一页</a>
-					<a href="#" class="active">1</a>
-					<a href="#">2</a>
-					<a href="#">3</a>
-					<a href="#">4</a>
-					<a href="#">5</a>
-					<a href="#">下一页></a>
-				</div>
 		</div>
 	</div>
 {% endblock %}
