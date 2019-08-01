@@ -11,10 +11,10 @@ https://docs.djangoproject.com/en/2.1/ref/settings/
 """
 
 import os
+import sys
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/2.1/howto/deployment/checklist/
@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'Store',
     'Buyer',
     'ckeditor',
+    'djcelery',
     'rest_framework',
     'ckeditor_uploader',
     # 'Store.templates',
@@ -154,4 +155,39 @@ REST_FRAMEWORK = {
     'DEFAULT_FILTER_BACKENDS':(
         'django_filters.rest_framework.DjangoFilterBackend',#过滤器
     )
+}
+
+#配置邮件服务器
+EMAIL_BACKIEND = 'django.core.mail.backends.smtp.EmailBackend'
+
+EMAIL_USE_TLS = False
+
+EMAIL_HOST = 'smtp.qq.com'
+EMAIL_PORT = 465
+EMAIL_HOST_USER = '1529825704@qq.com'
+EMAIL_HOST_PASSWORD = 'XXXX'
+DEFAUL_FROM_EMAIL = '1529825704@qq.com'
+
+
+#celery配置
+
+import djcelery #导入django-celery模块
+djcelery.setup_loader() #进行模块载
+BROKER_URL = 'redis://127.0.0.1:6379/1' #任务容器地址，redis数据库地址
+CELERY_IMPORTS = ('CeleryTask.tasks')  #具体的任务文件
+CELERY_TIMEZONE = 'Asia/Shanghai' #celery时区
+CELERYBEAT_SCHEDULER = 'djcelery.schedulers.DatabaseScheduler' #celey处理器，固定
+
+#celery 的定时器
+from celery.schedules import crontab
+from celery.schedules import timedelta
+
+CELERYBEAT_SCHEDULE = {    #定时器策略
+    #定时任务一：　每隔30s运行一次
+    u'测试定时器1': {
+        "task": "celeryTask.tasks.taskExample",
+        #"schedule": crontab(minute='*/2'),  # or 'schedule':   timedelta(seconds=3),
+        "schedule":timedelta(seconds=30),
+        "args": (),
+    },
 }

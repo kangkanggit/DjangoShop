@@ -507,4 +507,18 @@ class TypeViewSet(viewsets.ModelViewSet):
     serializer_class = GoodsTypeSerializer
 
 
+
+from django.core.mail import  send_mail
+def sendMail(request):
+    send_mail('邮件主题','邮件内容','from_email',['to_email'],fail_silently=False)
+
+
+
+#调用celery服务
+from CeleryTask.tasks import add
+from django.http import JsonResponse
+
+def get_add(request):
+    add.delay(2,3)
+    return JsonResponse({"statue":200})
 # Create your views here.
