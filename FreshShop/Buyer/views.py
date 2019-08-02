@@ -308,9 +308,13 @@ def pay_money(request):
         order.save()#保存数据
         orders_list = order.orderdetail_set.all()#查询所有的详细订单
         for i in orders_list:
+
             a = i.goods_id#获取对应的商品名称
-            print(type(a))
-            card = Cart.objects.filter(goods_id=a)
+
+            card = Cart.objects.filter(goods_id=a,goods_live=0)
+            for i in card:
+                i.goods_live = 1
+                i.save()
         return HttpResponseRedirect("https://openapi.alipaydev.com/gateway.do?" + order_string)
 
 
