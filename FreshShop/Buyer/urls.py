@@ -18,6 +18,7 @@ urlpatterns = [
 ]
 urlpatterns +=[
     path('base/',base),#模板页面
+    path('del_look/',del_look),#删除浏览记录
     path('ajax_add/',ajax_add),#商品增加功能
     path('ajax_minus/',ajax_minus),#商品减少功能的验证
     path('ajax_show/',ajax_show),#商品详细页面输入功能的ajax的验证
@@ -25,6 +26,7 @@ urlpatterns +=[
     path('adds_car/',adds_car),#加入购物车功能
     path('list_add/',list_add),#列表表页加入购物车功能
     path('show_order/',show_order),#详细订单
+    re_path(r'^shopping_car/(?P<goods_id>\d+)',shopping_car),#商品的详情页
 
 
 ]

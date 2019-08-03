@@ -44,6 +44,9 @@ def login(request):
 def index(request):
     result_list = []
     count = 1
+    car_listds = Cart.objects.filter(goods_live=0)#获取购物车的所有物品
+    munbers = len(car_listds)#获取购物车的个数
+    print(munbers)
     goods_list_type = GoodsType.objects.all()#查询所有的类型
 
     for goods_type in goods_list_type:#遍历每一个类型
@@ -81,10 +84,10 @@ def ajax_register(request):
    result = {'status':'error','content':''}
    if request.method == 'GET':
        username = request.GET.get('user_name')
-       print(username)
+       # print(username)
        if username:
            buyer = Buyer.objects.filter(username=username).first()
-           print(buyer)
+           # print(buyer)
            if buyer:
                result['content'] = '用户名存重复用'
            else:
@@ -97,6 +100,8 @@ def ajax_register(request):
 
 #商品的更多页面
 def show_goodlists(request):
+    car_listds = Cart.objects.filter(goods_live=0)  # 获取购物车的所有物品
+    munbers = len(car_listds)  # 获取购物车的个数
     goodslist = []
     type_id = request.GET.get('type_id')
     goods_type = GoodsType.objects.filter(id=type_id).first()#查找对应的类型
@@ -109,8 +114,12 @@ def show_goodlists(request):
 
 #商品加入购物车的功能
 def adds_car(request):
-    result = {'state':'error','data':''}
+    result = {'state':'error','data':'','munbers':''}
+
     if request.method == 'POST':
+        car_listds = Cart.objects.filter(goods_live=0)  # 获取购物车的所有物品
+        munbers = len(car_listds)  # 获取购物车的个数
+        result['munbers'] = munbers
         count = int(request.POST.get('count'))
         goods_id = request.POST.get('goods_id')#获取商品的id
         goods = Goods.objects.get(id=int(goods_id))
@@ -140,7 +149,7 @@ def list_add(request):
         goods_id = request.GET.get('goods_id')#获取商品的id
         goods = Goods.objects.get(id=int(goods_id))#获取对应的商品
         a= goods.goods_type.id
-        print(a)
+        # print(a)
         user_id = request.COOKIES.get('user_id')#获取用户id
 
         cart = Cart()
@@ -158,11 +167,15 @@ def list_add(request):
 
 #购物车功能
 def car(request):
+    goods_list1 = []
     user_id = request.COOKIES.get('user_id')#获取用户id
     goods_list = Cart.objects.filter(user_id=user_id,goods_live=0)#获取购物车列表
+    name = [i.goods_name for i  in goods_list]
+
+    print(name)
     h = [i.goods_total for i in goods_list]#循环购物车列表类
     money = sum(h)#计算总价钱
-    number = len(goods_list)#统计商品个数
+    number = len(goods_list1)#统计商品个数
 
     if request.method == "POST":
         post_data = request.POST
@@ -204,10 +217,35 @@ def car(request):
     return render(request,'buyer/car.html',locals())
 
 
+#购物车删除功能
+def shopping_car(request,goods_id):
+    # print(goods_id)
+    cars = Cart.objects.get(id=int(goods_id))#获得具体的商品
+    cars.delete()
+    return HttpResponseRedirect('/Buyer/car/')
+
+
 #商品的详情页
 def show_shop(request,goods_id):
+    list = []
+    car_listds = Cart.objects.filter(goods_live=0)  # 获取购物车的所有物品
+    munbers = len(car_listds)  # 获取购物车的个数
     goods = Goods.objects.filter(id=goods_id).first()#查询对应的商品
     goods_type = goods.goods_type#查询对应的商品类型
+    user_id = request.COOKIES.get('user_id')#获取用户的id
+    print(goods_id)
+    gooders = History.objects.filter(goods_id=goods_id)#查询商品
+    if not gooders:#如果没有的就保存下来，有的返回
+        if gooders not in list:
+            list.append(gooders)
+            history = History()
+            history.goods_name = goods.goods_name
+            history.goods_price = goods.goods_price
+            history.goods_image = goods.goods_image
+            history.goods_id = goods.id
+            history.user_id = user_id
+            history.goods_live = 1
+            history.save()#保存数据
     return render(request,'buyer/show_shop.html',locals())
 
 #订单生产
@@ -237,7 +275,7 @@ def pay_order(request):
         #保存数据订单表
         order = Order()#保存订单表
         order.order_id = setOrder_id(str(user_id),str(goods_id),str(store_id))#生成订单表
-        print(order.order_id)
+        # print(order.order_id)
         order.goods_count = count#保存商品的数量
         order.order_user = Buyer.objects.get(id=user_id)#订单用户
         order.order_price = count * goods.goods_price#订单的总价格
@@ -322,18 +360,31 @@ def pay_money(request):
 #个人信息页面
 @loginValid
 def user_infor(request):
+    history_list = History.objects.filter(goods_live=1)#查询所有有的历史记录
+
     result = {'name':'','phone':'','address':''}
     username = request.COOKIES.get('username')
-    user_id = request.COOKIES.get('user_id')
-    user = Buyer.objects.filter(id=user_id).first()
-    phone = user.phone
-    connect_address = user.connect_address
+    user_id = request.COOKIES.get('user_id')#获取用户id
+    user = Buyer.objects.filter(id=user_id).first()#查到第一用户
+    # print(user)
+    a = user.address_set.all().first()
+    # print(a)
+    phone = a.recver_phone
+    connect_address =a.address
     if user:
         result['name'] = username
         result['phone'] = phone
         result['address'] = connect_address
-    return render(request,'buyer/user_infor.html',{'result':result})
+    return render(request,'buyer/user_infor.html',{'result':result,'history_list':history_list})
 
+
+#删除浏览记录的功能
+def del_look(request):
+    history = History.objects.all()
+    for i in history:
+        i.goods_live = 2
+        i.save()
+    return HttpResponseRedirect('/Buyer/user_infor/')
 
 #获取订单时间的函数
 def times(order):
@@ -342,7 +393,7 @@ def times(order):
     order_time = c[:4] + '-' + c[4:6] + '-' + c[6:8] + ' ' + c[8:10] + ':' + c[10:12] + ':' + c[12:]  # 生成订单时间
     return order_time
 
-#编写订单页面(需要开发)
+#编写订单页面
 @loginValid
 def user_order(request):
     list1 =[]
@@ -388,7 +439,7 @@ def user_site(request):
         address = request.POST.get('address')
         post_number = request.POST.get('post_number')
         recver_phone = request.POST.get('recver_phone')
-        buyer_id = request.POST.get('buyer_id')
+        buyer_id = request.POST.get('buyer_id')#用户id
         add = Address()#保存数据
         add.recver = recver
         add.address = address
@@ -479,6 +530,14 @@ def delete_cart(request):
     return HttpResponseRedirect('Buyer/')
 
 
+#购物车展示的ajax的局部刷新
+def ajax_car(request):
+    result = {'numebers':''}
+    if request.method == 'GET':
+        car_listds = Cart.objects.filter(goods_live=0)  # 获取购物车的所有物品
+        munbers = len(car_listds)  # 获取购物车的个数
+        result['numebers'] = munbers
+    return JsonResponse(result)
 #模板页面
 def base(request):
     return render(request,'buyer/base.html')

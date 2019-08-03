@@ -23,18 +23,20 @@
 						</ul>
 				</div>
 
-				<h3 class="common_title2">最近浏览</h3>
+				<h3 class="common_title2">最近浏览 &nbsp;&nbsp;| &nbsp;&nbsp;<a style="color: black" class="add_goods" href="/Buyer/del_look/">删除记录</a></h3>
 				<div class="has_view_list">
             <ul class="goods_type_list clearfix">
+               {% for history in history_list %}
 				<li>
-					<a href="detail.html"><img src="/static/buyer/images/goods/goods003.jpg"></a>
-					<h4><a href="detail.html">大兴大棚草莓</a></h4>
+					<a href="/Buyer/show_shop/{{ history.goods_id }}"><img src="/static/{{ history.goods_image }}"></a>
+					<h4><a href="/Buyer/show_shop/{{ history.goods_id }}">{{ history.goods_name }}</a></h4>
 					<div class="operate">
-						<span class="prize">￥16.80</span>
-						<span class="unit">16.80/500g</span>
-						<a href="#" class="add_goods" title="加入购物车"></a>
+						<span class="prize">￥{{ history.goods_price }}</span>
+						<span class="unit">{{ history.goods_price }}/500g</span>
+						<a href="/Buyer/list_add/?count=1&goods_id={{ history.goods_id }}" class="add_goods" title="加入购物车"></a>
 					</div>
 				</li>
+                 {% endfor %}
 			</ul>
 		</div>
 		</div>

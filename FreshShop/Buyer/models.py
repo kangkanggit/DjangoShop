@@ -53,6 +53,15 @@ class Cart(models.Model):
     user_id = models.IntegerField(verbose_name='用户id')
     goods_live = models.IntegerField(default=0,verbose_name='购物车的状态')
 
+#历史浏览功记录表
+class History(models.Model):
+    goods_name = models.CharField(max_length=32,verbose_name='商品的名称')
+    goods_price = models.FloatField(verbose_name='商品的价格')
+    goods_image = models.ImageField(upload_to='buyer/images',verbose_name='商品的图片')
+    goods_id = models.IntegerField(verbose_name='商品的id')
+    user_id = models.IntegerField(verbose_name='用户id')
+    goods_live = models.IntegerField(verbose_name='状态',default=0)
+
 
 
 # Create your models here.

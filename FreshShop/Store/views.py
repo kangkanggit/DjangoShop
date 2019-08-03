@@ -422,12 +422,10 @@ def show_order(request):
 #删除订单
 def delete_order(request):
    order_id = request.GET.get('order_id')#获取订单的id
-   print(order_id)
-   print(type(order_id))
+   # print(order_id)
+   # print(type(order_id))
+   #订单和订单详细是外键关系所以删除主键外键也会删除
    order = Order.objects.get(id=order_id)#查询对应的订单
-   order_list = order.orderdetail_set.all()#查询到对应的详细订单
-   for i in order_list:
-       i.delete()#循环删除
    order.delete()#最后删除这个订单
    return HttpResponseRedirect('/Store/order_list')
 #已处理订单列表
@@ -513,7 +511,6 @@ def sendMail(request):
     send_mail('邮件主题','邮件内容','from_email',['to_email'],fail_silently=False)
 
 
-
 #调用celery服务
 from CeleryTask.tasks import add
 from django.http import JsonResponse
@@ -521,4 +518,11 @@ from django.http import JsonResponse
 def get_add(request):
     add.delay(2,3)
     return JsonResponse({"statue":200})
+
+
+#案例中间件视图
+def small_white_views(request):
+    print('我是哈哈')
+    return JsonResponse({'name':'小李','age':15})
+
 # Create your views here.

@@ -4,6 +4,7 @@
 {% endblock %}
 
 {% block style %}
+    <script src="/static/buyer/js/jquery.min.js"></script>
 {% endblock %}
 {% block ss %}
     <div class="navbar_con" xmlns="http://www.w3.org/1999/html">
@@ -33,7 +34,10 @@
 {% block car %}
         <div class="guest_cart fr">
 			<a href="/Buyer/car/" class="cart_name fl">我的购物车</a>
-			<div class="goods_count fl">1</div>
+			{% if munbers %}
+            <div id="countsd" class="goods_count fl">{{ munbers }}</div>
+            {% else %}
+            {% endif %}
 		</div>
 {% endblock %}
 {% block content %}
@@ -75,7 +79,7 @@
                         <div class="operate">
                             <span class="prize">￥{{ goods.goods_price }}</span>
                             <span class="unit">{{ goods.goods_price }}/500g</span>
-                            <a href="/Buyer/list_add/?count=1&goods_id={{ goods.id }}"  class="add_goods" title="加入购物车"></a>
+                            <a href="/Buyer/list_add/?count=1&goods_id={{ goods.id }}" id="add" class="add_goods" title="加入购物车"></a>
 
                         </div>
                         </li>
@@ -96,4 +100,7 @@
 {% endblock %}
 
 {% block script %}
+    <script>
+
+    </script>
 {% endblock %}

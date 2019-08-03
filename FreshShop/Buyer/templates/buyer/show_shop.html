@@ -34,7 +34,10 @@
 {% block car %}
         <div class="guest_cart fr">
 			<a href="/Buyer/car/" class="cart_name fl">我的购物车</a>
-			<div class="goods_count fl">1</div>
+			{% if munbers %}
+            <div class="goods_count fl" id="countss">{{ munbers }}</div>
+            {% else %}
+            {% endif %}
 		</div>
 {% endblock %}
 {% block content %}
@@ -210,7 +213,9 @@
                             type:'post',
                             data:sendData,
                             success:function (data) {
-                                alert(data.data)
+                                var munbers = data.munbers;
+                                $('#countss').text(munbers+1);
+                                alert(data.munbers)
                             },
                             error:function (error) {
                                 console.log(error)

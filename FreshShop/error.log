@@ -1,0 +1,10 @@
+2019-08-02 17:06:36[Error]Goods matching query does not exist. 
+2019-08-02 17:08:55[Error]Goods matching query does not exist. 
+2019-08-02 17:12:07[Error]Goods matching query does not exist. 
+2019-08-02 17:12:38[Error]Goods matching query does not exist. 
+2019-08-03 14:50:01[Error]'float' object has no attribute '_committed' 
+2019-08-03 15:14:48[Error]'NoneType' object has no attribute 'goods_type' 
+2019-08-03 15:17:24[Error]Goods matching query does not exist. 
+2019-08-03 15:17:28[Error]'NoneType' object has no attribute 'goods_type' 
+2019-08-03 15:17:31[Error]'NoneType' object has no attribute 'goods_type' 
+2019-08-03 15:25:28[Error]History matching query does not exist. 

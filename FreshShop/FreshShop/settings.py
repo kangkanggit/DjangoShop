@@ -55,6 +55,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'FreshShop.middleware.MiddlewareTest'
 ]
 
 ROOT_URLCONF = 'FreshShop.urls'
@@ -187,7 +188,13 @@ CELERYBEAT_SCHEDULE = {    #定时器策略
     u'测试定时器1': {
         "task": "celeryTask.tasks.taskExample",
         #"schedule": crontab(minute='*/2'),  # or 'schedule':   timedelta(seconds=3),
-        "schedule":timedelta(seconds=30),
+        "schedule":timedelta(seconds=3),
         "args": (),
     },
+    u'康康的机器人':{
+        "task": "celeryTask.tasks.DingTalk",
+        #"schedule": crontab(minute='*/2'),  # or 'schedule':   timedelta(seconds=3),
+        "schedule":timedelta(seconds=5),
+        "args": (),
+    }
 }
