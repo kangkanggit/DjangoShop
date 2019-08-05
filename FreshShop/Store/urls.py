@@ -37,5 +37,6 @@ urlpatterns += [
     path('swv/',small_white_views),#测试
     path('ajd/',ajax_goods_list),#vu测试
     path('get_add/',get_add),#celery的服务定时服务
+    path('ajax_login/',ajax_login),#登录的ajax的验证
 
 ]

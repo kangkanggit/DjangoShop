@@ -51,7 +51,7 @@ def login(request):
     登录功能，登录成功，跳转到首页
     失败跳转到，登录页面
     """
-    result = {'content':''}#返回的判断
+    result = {'content': ''}  # 返回的判断
     response = render(request,'store/login.html',locals())
     response.set_cookie('login_from','login_page')
     if request.method == 'POST':
@@ -76,7 +76,31 @@ def login(request):
                     result['content'] = '密码错误'
             else:
                 result['content'] = '用户不存在'
+        else:
+            result['content'] = '用户名密码不可以为空'
     return response
+
+
+#登录功能的ajax的请求
+def ajax_login(request):
+    result = {'content':''}
+    if request.method == "POST":
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+        print(username)
+        if username:
+            user = Buyer.objects.filter(username=username)#查询名字是否在
+            if user:
+                psw = user.password
+                if password == psw :
+                    result['content'] = 'ok'
+                else:
+                    result['content'] = '密码错误或不可以为空'
+            else:
+                result['content'] = '用户名不存在'
+        else:
+            result['content'] = '用户密吗不可以为空'
+    return JsonResponse(result)
 
 @loginValid
 #主页面
@@ -92,6 +116,7 @@ def ajax_vaild(request):
         username = request.GET.get('username')
         if username:
             user = Seller.objects.filter(username=username).first()
+            print(user)
             if user:
                 restul['content'] = '用户名存在'
             else:
@@ -522,7 +547,7 @@ def get_add(request):
 
 #案例中间件视图
 def small_white_views(request):
-    print('我是哈哈')
+    # print('我是哈哈')
     return JsonResponse({'name':'小李','age':15})
 
 # Create your views here.

@@ -167,15 +167,11 @@ def list_add(request):
 
 #购物车功能
 def car(request):
-    goods_list1 = []
     user_id = request.COOKIES.get('user_id')#获取用户id
     goods_list = Cart.objects.filter(user_id=user_id,goods_live=0)#获取购物车列表
-    name = [i.goods_name for i  in goods_list]
-
-    print(name)
     h = [i.goods_total for i in goods_list]#循环购物车列表类
     money = sum(h)#计算总价钱
-    number = len(goods_list1)#统计商品个数
+    number = len(goods_list)#统计商品个数
 
     if request.method == "POST":
         post_data = request.POST

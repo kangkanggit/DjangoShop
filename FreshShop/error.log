@@ -8,3 +8,11 @@
 2019-08-03 15:17:28[Error]'NoneType' object has no attribute 'goods_type' 
 2019-08-03 15:17:31[Error]'NoneType' object has no attribute 'goods_type' 
 2019-08-03 15:25:28[Error]History matching query does not exist. 
+2019-08-04 16:21:44[Error]int() argument must be a string, a bytes-like object or a number, not 'NoneType' 
+2019-08-04 16:21:45[Error]int() argument must be a string, a bytes-like object or a number, not 'NoneType' 
+2019-08-04 16:21:46[Error]int() argument must be a string, a bytes-like object or a number, not 'NoneType' 
+2019-08-04 16:30:38[Error]Buyer matching query does not exist. 
+2019-08-04 16:30:49[Error]Buyer matching query does not exist. 
+2019-08-04 16:32:10[Error]Buyer matching query does not exist. 
+2019-08-04 23:05:51[Error]'QuerySet' object has no attribute 'password' 
+2019-08-04 23:08:47[Error]'QuerySet' object has no attribute 'password' 
