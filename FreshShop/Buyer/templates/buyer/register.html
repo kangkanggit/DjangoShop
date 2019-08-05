@@ -5,9 +5,9 @@
 	<title>天天生鲜-注册</title>
 	<link rel="stylesheet" type="text/css" href="/static/buyer/css/reset.css">
 	<link rel="stylesheet" type="text/css" href="/static/buyer/css/main.css">
-{#	<script type="text/javascript" src="/static/buyer/js/jquery-1.12.4.min.js"></script>#}
-{#	<script type="text/javascript" src="/static/buyer/js/register.js"></script>#}
-    <script type="text/css" src="/static/store/js/jquery.min.js"></script>
+	<script type="text/javascript" src="/static/buyer/js/jquery-1.12.4.min.js"></script>
+	<script type="text/javascript" src="/static/buyer/js/register.js"></script>
+
 </head>
 <body>
 	<div class="register_con">
@@ -28,7 +28,7 @@
 				<ul>
 					<li>
 						<label>用户名:</label>
-						<input type="text" name="user_name" id="users_name">
+						<input type="text" name="user_name" id="username">
 						<span class="error_tip">提示信息</span>
 					</li>
 					<li>
@@ -52,7 +52,7 @@
 						<span class="error_tip2">提示信息</span>
 					</li>
 					<li class="reg_sub">
-						<input type="submit" value="注 册" name="">
+						<input type="submit" id="submit" value="注 册" name="">
 					</li>
 				</ul>				
 				</form>
@@ -75,11 +75,11 @@
 		<p>CopyRight © 2016 北京天天生鲜信息技术有限公司 All Rights Reserved</p>
 		<p>电话：010-****888    京ICP备*******8号</p>
 	</div>
+    <script type="text/css" src="/static/buyer/js/jquery.min.js"></script>
     <script>
-      //ajax_的前端效验
-        $('#users_name').blur(
+        $('#username').blur(
         function () {
-          var value = $('#users_name').val();
+          var value = $('#username').val();
           var url = '/Buyer/ajax_register/?user_name='+value;
           $.ajax(
           {

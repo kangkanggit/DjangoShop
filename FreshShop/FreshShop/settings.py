@@ -48,6 +48,7 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
+    # 'django.middleware.cache.UpdateCacheMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -55,7 +56,8 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'FreshShop.middleware.MiddlewareTest'
+    'FreshShop.middleware.MiddlewareTest',
+    # 'django.middleware.cache.FetchFromCacheMiddleware'
 ]
 
 ROOT_URLCONF = 'FreshShop.urls'
@@ -112,15 +114,15 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/2.1/topics/i18n/
 
-LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = 'zh-hans'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Asia/Shanghai'
 
 USE_I18N = True
 
 USE_L10N = True
 
-USE_TZ = True
+USE_TZ = False#为TRUE,默认使用utc
 
 
 # Static files (CSS, JavaScript, Images)
@@ -198,3 +200,45 @@ CELERYBEAT_SCHEDULE = {    #定时器策略
         "args": (),
     }
 }
+
+#本地缓存
+# CACHES = {
+#     'default':{
+#         'BACKEND':'django.core.cache.backends.locmem.LocMemCache'#默认本地缓存
+#     }
+# }
+
+#mencached的缓存配置
+# CACHES = {
+#     'default': {
+#         'BACKEND': 'django.core.cache.backends.memcached.MemcachedCache',#声明mencached缓存
+#         'LOCATION':[
+#             '127.0.0.1:11211'
+#         ]#mencache地址
+#     }
+# }
+
+#Redis数据库缓存
+# CACHES = {
+#     'default': {
+#         'BACKEND': 'django.core.cache.RedisCache',#声明RedisCache缓存
+#         'LOCATION':[
+#             'redis://127.0.0.1:6379/1'
+#         ],#mencache地址
+#         'OPTIONS':{
+#             'CLIENT_CLASS':'django_redis.client.DefaultClient'
+#         }
+#     }
+# }
+
+#数据库的缓存
+CACHES = {
+    'default':{
+        'BACKEND':'django.core.cache.backends.db.DatabaseCache',#默认数据库的缓存
+        'LOCATION':'cache_table'#存储缓存的表
+    }
+}
+
+#全栈缓存
+# CACHE_MIDDLEWARE_KEY_PREFIX = ''
+# CACHE_MIDDLEWARE_SECONDS = 600

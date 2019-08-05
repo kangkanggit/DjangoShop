@@ -66,6 +66,7 @@
         $('#id_username').blur(
         function () {
           var value = $('#id_username').val();
+          console.log(value);
           var url = '/Store/ajx/?username='+value;
           $.ajax(
           {

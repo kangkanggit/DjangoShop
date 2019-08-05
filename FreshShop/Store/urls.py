@@ -29,12 +29,13 @@ urlpatterns = [
     path('login_out/',login_out),#退出登陆
 
 ]
+from django.views.decorators.cache import cache_page
 
 urlpatterns += [
     path('base/',base),  # 模板版页面
-    path('ajx/',ajax_vaild),#ajax的前端验证
+    path('ajx/',ajax_vaild),#ajax的前端验证注册验证
     path('ajax_type/', ajax_type),  # ajax的店铺类型前端验证
-    path('swv/',small_white_views),#测试
+    path('swv/',cache_page(15*60)(small_white_views)),#声明缓存
     path('ajd/',ajax_goods_list),#vu测试
     path('get_add/',get_add),#celery的服务定时服务
     path('ajax_login/',ajax_login),#登录的ajax的验证

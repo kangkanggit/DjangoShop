@@ -12,8 +12,8 @@ class MiddlewareTest(MiddlewareMixin):
         :return:
         """
         username = request.GET.get('username')#获取get请的数据
-        print(username)
-        if username and username == '123':#判断请求数据的结果
+        # print(username)
+        if username and username == '::':#判断请求数据的结果
             return HttpResponse('404')
     def process_view(self,request,view_func,view_args,view_kwargs):
         """

@@ -1,9 +1,11 @@
 import hashlib
 
 from django.shortcuts import render
+from django.http import HttpResponse
 from django.http import JsonResponse
 from django.core.paginator import Paginator#分页模块
 from django.shortcuts import HttpResponseRedirect
+from django.views.decorators.cache import cache_page#缓存模块
 
 from Store.models import *
 from Buyer.models import *
@@ -71,7 +73,7 @@ def login(request):
                         response.set_cookie('has_store',store.id)
                     else:
                         response.set_cookie('has_store','')
-                    return response
+                    # return response
                 else:
                     result['content'] = '密码错误'
             else:
@@ -87,13 +89,12 @@ def ajax_login(request):
     if request.method == "POST":
         username = request.POST.get('username')
         password = request.POST.get('password')
-        print(username)
         if username:
-            user = Buyer.objects.filter(username=username)#查询名字是否在
+            user = Buyer.objects.filter(username=username).first()#查询名字是否在
             if user:
                 psw = user.password
-                if password == psw :
-                    result['content'] = 'ok'
+                if setPassword(password ) == psw :
+                    pass
                 else:
                     result['content'] = '密码错误或不可以为空'
             else:
@@ -102,11 +103,29 @@ def ajax_login(request):
             result['content'] = '用户密吗不可以为空'
     return JsonResponse(result)
 
+#计算单个商品的剩余量
+def const(count):
+    orders = Order.objects.filter(order_status=3)#查询所有的详细订单发货的订单
+    counts = sum([i.goods_count for i in orders])#获取销售的商品数量
+    countds = count-counts
+    shengyu = str(((countds / count) * 100))[:5]
+    return shengyu
+#计算商品中数的剩余量
+
 @loginValid
 #主页面
 def index(request):
-    return render(request, 'store/index.html')
-
+    user_id = request.COOKIES.get('username')
+    store_id = request.COOKIES.get('has_store')#获取店铺id
+    goods_type = GoodsType.objects.all()
+    store = Store.objects.filter(id=store_id).first()#获取对应的店铺
+    money = store.store_money#得到店铺的起步资金
+    goods_list = Goods.objects.filter(store_id=store_id)#获取商店对应的商品
+    count = sum([i.goods_number for i in goods_list])#获取库存状态
+    counts = const(count)#计算剩余数量
+    orderd_list = Order.objects.all()#查询所有的订单
+    moneys = sum([i.order_price for i in orderd_list])#获取店铺的收入
+    return render(request, 'store/index.html',locals())
 
 
 #ajax注册验证
@@ -114,16 +133,18 @@ def ajax_vaild(request):
     restul = {'status':'error','content':''}
     if request.method == 'GET':
         username = request.GET.get('username')
+        print(username)
+        # print(type(a))
         if username:
-            user = Seller.objects.filter(username=username).first()
-            print(user)
+            user = Seller.objects.filter(username=username)
+            # print(user)
             if user:
                 restul['content'] = '用户名存在'
             else:
                 restul['content'] = '用户名可以用'
                 restul['status'] = 'success'
         else:
-            restul['content'] = '用户名不为空'
+            restul['content'] = '用户名密码不为空'
     return JsonResponse(restul)
 
 #店铺注册页面
@@ -219,10 +240,9 @@ def list_goods(request,status):
     paginator = Paginator(good_list,muns)#展示的内容和每一页展示的数据
     pages = paginator.count#获取数据的总条数
     list_sum = paginator.num_pages#总页数
-    if int(page_num) :
-       page = paginator.page(int(page_num))#获取展示页数对应的内容
-    else:
-       page = paginator.page(int(page_num)+1)#获取展示页数对应的内容
+    page = paginator.page(int(page_num))#获取展示页数对应的内容
+    if not page:
+       page = paginator.page(int(page_num)-1)#获取展示页数对应的内容
     page_range = paginator.page_range#获取页面列表数
     next_page = int(page_num)#下一页默认等于当前页加一
     go_page = int(page_num)#上一页默认当前页减一
@@ -265,9 +285,10 @@ def set_goods(request,status):
 
 #移除功能
 def delete_store(request):
+    referer = request.META.get('HTTP_REFERER')
     id = request.GET.get('id')
     Goods.objects.get(id=id).delete()
-    return HttpResponseRedirect('/Store/list_goods/')
+    return HttpResponseRedirect(referer)
 
 #商品修改功能
 def update_goods(request,goods_id):
@@ -362,7 +383,7 @@ def add_goodsType(request):
     if int(page_num):
         page = paginator.page(int(page_num))  # 获取展示页数对应的内容
     else:
-        page = paginator.page(int(page_num) + 1)  # 获取展示页数对应的内容
+        page = paginator.page(int(page_num) - 1)  # 获取展示页数对应的内容
 
     page_range = paginator.page_range  # 获取页面列表数
     next_page = int(page_num)  # 下一页默认等于当前页加一
@@ -406,12 +427,9 @@ def order_list(request):
     paginator = Paginator(list_order3, 6)  # 展示的内容和每一页展示的数据
     pages = paginator.count  # 获取数据的总条数
     list_sum = paginator.num_pages  # 总页数
-
-    if int(page_num):
-        page = paginator.page(int(page_num))  # 获取展示页数对应的内容
-    else:
-        page = paginator.page(int(page_num) + 1)  # 获取展示页数对应的内容
-
+    page = paginator.page(int(page_num))  # 获取展示页数对应的内容
+    if  not page:
+        page = paginator.page(int(page_num) - 1)  # 获取展示页数对应的内容
     page_range = paginator.page_range  # 获取页面列表数
     next_page = int(page_num)  # 下一页默认等于当前页加一
     go_page = int(page_num)  # 上一页默认当前页减一
@@ -447,8 +465,6 @@ def show_order(request):
 #删除订单
 def delete_order(request):
    order_id = request.GET.get('order_id')#获取订单的id
-   # print(order_id)
-   # print(type(order_id))
    #订单和订单详细是外键关系所以删除主键外键也会删除
    order = Order.objects.get(id=order_id)#查询对应的订单
    order.delete()#最后删除这个订单
@@ -473,12 +489,9 @@ def ok_order(request):
     paginator = Paginator(list_order3, 6)  # 展示的内容和每一页展示的数据
     pages = paginator.count  # 获取数据的总条数
     list_sum = paginator.num_pages  # 总页数
-
-    if int(page_num):
-        page = paginator.page(int(page_num))  # 获取展示页数对应的内容
-    else:
-        page = paginator.page(int(page_num) + 1)  # 获取展示页数对应的内容
-
+    page = paginator.page(int(page_num))  # 获取展示页数对应的内容
+    if not page:
+        page = paginator.page(int(page_num) - 1)  # 获取展示页数对应的内容
     page_range = paginator.page_range  # 获取页面列表数
     next_page = int(page_num)  # 下一页默认等于当前页加一
     go_page = int(page_num)  # 上一页默认当前页减一
@@ -546,8 +559,11 @@ def get_add(request):
 
 
 #案例中间件视图
+
+@cache_page(60*50)
 def small_white_views(request):
     # print('我是哈哈')
-    return JsonResponse({'name':'小李','age':15})
+    # return JsonResponse({'name':'小李','age':15})
+    return HttpResponse('我是缓存，测试')
 
 # Create your views here.

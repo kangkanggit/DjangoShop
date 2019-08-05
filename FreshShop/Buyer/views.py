@@ -24,6 +24,7 @@ def loginValid(fun):
 
 #登录页面
 def login(request):
+    result = {'content':''}
     if request.method == 'POST':
         username = request.POST.get('username')
         password = request.POST.get('pwd')
@@ -37,7 +38,13 @@ def login(request):
                     response.set_cookie('user_id',user.id)
                     request.session['username'] = user.username
                     return response
-    return render(request,'buyer/login.html')
+                else:
+                    result['content'] = '密码错误'
+            else:
+                result['content'] = '用户名不存在'
+        else:
+            result['content'] = '密码账号不可以为空'
+    return render(request,'buyer/login.html',{'result':result})
 
 #首页
 @loginValid
@@ -84,10 +91,10 @@ def ajax_register(request):
    result = {'status':'error','content':''}
    if request.method == 'GET':
        username = request.GET.get('user_name')
-       # print(username)
+       print(username)
        if username:
            buyer = Buyer.objects.filter(username=username).first()
-           # print(buyer)
+           print(buyer)
            if buyer:
                result['content'] = '用户名存重复用'
            else:
