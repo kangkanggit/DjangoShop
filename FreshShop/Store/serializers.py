@@ -6,7 +6,7 @@ class UserSerializer(serializers.HyperlinkedModelSerializer):
     class Meta: #元素
         model = Goods#要接口的数据模型
         fields = ['goods_name','goods_price','goods_number'
-                  ,'goods_date','goods_safeDate','id']#要返回的字段
+                  ,'goods_date','goods_safeDate','id','goods_less']#要返回的字段
 
 class GoodsTypeSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:#字段

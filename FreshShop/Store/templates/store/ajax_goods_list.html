@@ -79,7 +79,7 @@
                    this.$http.get('/APIgoods/').then(
                        function (data) {
                            this.goods_list = data.data.results;
-
+                           console.log(this.goods_list);
                            page_number = Math.ceil(data.data.count/3);
                            var page_range = [...new Array(page_number+1).keys()];
                            this.page_range = page_range;

@@ -80,8 +80,8 @@
                 <div class="card-body">
                   <div class="row no-gutters align-items-center">
                     <div class="col mr-2">
-                      <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">留言信息</div>
-                      <div class="h5 mb-0 font-weight-bold text-gray-800">18</div>
+                      <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">商品数量</div>
+                      <div class="h5 mb-0 font-weight-bold text-gray-800">{{ mum }}</div>
                     </div>
                     <div class="col-auto">
                       <i class="fas fa-comments fa-2x text-gray-300"></i>
@@ -99,27 +99,57 @@
             <!-- Area Chart -->
             <div class="col-xl-8 col-lg-7">
               <div class="card shadow mb-4">
-                <!-- Card Header - Dropdown -->
-                <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                  <h6 class="m-0 font-weight-bold text-primary">经营状态</h6>
-                  <div class="dropdown no-arrow">
-                    <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                      <i class="fas fa-ellipsis-v fa-sm fa-fw text-gray-400"></i>
-                    </a>
-                    <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in" aria-labelledby="dropdownMenuLink">
-                      <div class="dropdown-header">Dropdown Header:</div>
-                      <a class="dropdown-item" href="#">Action</a>
-                      <a class="dropdown-item" href="#">Another action</a>
-                      <div class="dropdown-divider"></div>
-                      <a class="dropdown-item" href="#">Something else here</a>
-                    </div>
-                  </div>
+                <div class="card-header py-3">
+                  <h6 class="m-0 font-weight-bold text-primary">具体的商品情况</h6>
                 </div>
-                <!-- Card Body -->
                 <div class="card-body">
-                  <div class="chart-area">
-                    <canvas id="myAreaChart"></canvas>
+                  {% for goods in page %}
+                  <h4 class="small font-weight-bold">{{ goods.goods_name }} <span class="float-right">{{ goods.goods_number }}</span></h4>
+                  <div class="progress mb-4">
+                    <div class="progress-bar bg-warning" role="progressbar" style="width: {{ goods.goods_less }}%" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100"></div>
                   </div>
+                  {% endfor %}
+                    <div class='row'>
+                        <div class="div col-sm-12 col-md-5">
+                            <div class="dataTables_info" id="dataTable_info">
+                                一共有{{ pages }}数据|共{{ list_sum }}页|当前是第{{ page_num }}页
+                            </div>
+                        </div>
+                        <div class="col-sm-12 col-md-7">
+                            <div class="dataTables_paginate paging_simple_numbers" id="dataTable_paginate">
+                                <ul class="pagination">
+
+                                    {% if go_page %}
+                                        <li class="paginate_button page-item next">
+                                            <a href="?keyword={{ keywords }}&page_num={{ go_page  }}"  class="page-link" >上一页</a>
+                                        </li>
+                                    {% else %}
+                                        <li class="paginate_button page-item next disabled">
+                                            <a href=""  class="page-link " >上一页</a>
+                                        </li>
+                                    {% endif %}
+                                    {% for p in page_range %}
+                                        <li class="paginate_button page-item active">
+                                            <a href="?keyword={{ keywords }}&page_num={{ p }}" class="page-link">{{ p }}</a>
+                                        </li>
+                                    {% endfor %}
+
+                                    {% if next_page %}
+                                        <li class="paginate_button page-item next">
+                                            <a href="?keyword={{ keywords }}&page_num={{ next_page }}" class="page-link">下一页</a>
+                                        </li>
+                                    {% else %}
+                                        <li class="paginate_button page-item next disabled">
+                                            <a href=""  class="page-link">下一页</a>
+                                        </li>
+                                    {% endif %}
+                                </ul>
+                            </div>
+                        </div>
+                        <div>
+
+                        </div>
+                    </div>
                 </div>
               </div>
             </div>
@@ -134,13 +164,13 @@
                     <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                       <i class="fas fa-ellipsis-v fa-sm fa-fw text-gray-400"></i>
                     </a>
-                    <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in" aria-labelledby="dropdownMenuLink">
-                      <div class="dropdown-header">Dropdown Header:</div>
-                      <a class="dropdown-item" href="#">Action</a>
-                      <a class="dropdown-item" href="#">Another action</a>
-                      <div class="dropdown-divider"></div>
-                      <a class="dropdown-item" href="#">Something else here</a>
-                    </div>
+{#                    <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in" aria-labelledby="dropdownMenuLink">#}
+{#                      <div class="dropdown-header">Dropdown Header:</div>#}
+{#                      <a class="dropdown-item" href="#">Action</a>#}
+{#                      <a class="dropdown-item" href="#">Another action</a>#}
+{#                      <div class="dropdown-divider"></div>#}
+{#                      <a class="dropdown-item" href="#">Something else here</a>#}
+{#                    </div>#}
                   </div>
                 </div>
                 <!-- Card Body -->
@@ -167,19 +197,7 @@
             <div class="col-lg-6 mb-4">
 
               <!-- Project Card Example -->
-              <div class="card shadow mb-4">
-                <div class="card-header py-3">
-                  <h6 class="m-0 font-weight-bold text-primary">具体的商品情况</h6>
-                </div>
-                <div class="card-body">
-                  {% for goods in goods_list %}
-                  <h4 class="small font-weight-bold">{{ goods.goods_name }} <span class="float-right">{{ goods.goods_number }}</span></h4>
-                  <div class="progress mb-4">
-                    <div class="progress-bar bg-danger" role="progressbar" style="width: 100%" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100"></div>
-                  </div>
-                  {% endfor %}
-                </div>
-              </div>
+
 
 {% endblock %}
 {% block script %}

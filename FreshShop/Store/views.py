@@ -107,20 +107,70 @@ def ajax_login(request):
 def const(count):
     orders = Order.objects.filter(order_status=3)#查询所有的详细订单发货的订单
     counts = sum([i.goods_count for i in orders])#获取销售的商品数量
-    countds = count-counts
-    shengyu = str(((countds / count) * 100))[:5]
+    countds = count-counts#计算剩余的数据
+    shengyu = str(((countds / count) * 100))[:5]#计算出剩余的百分比
     return shengyu
 #计算商品中数的剩余量
+def shop_count(shop):
+    goods = Goods.objects.filter(goods_name=shop).first()#获取具体的商品
+
+    order = OrderDetail.objects.filter(goods_name=goods.goods_name,order_id__order_status=3).all()#获取商品的订单
+
+    if order :
+        shops = sum([i.goods_number for i in order])#计算这个商品买出的个数
+        goods_ck = goods.goods_number - shops
+
+        if shops == goods.goods_number : #如果全部卖出的话
+            goods.goods_number = 0
+            goods.save()#修改数据情况库存
+        return  goods_ck
+    return goods.goods_number
+
 
 @loginValid
 #主页面
 def index(request):
+    keywords = request.GET.get('keyword', '')  # 实现模糊查找
+    page_num = request.GET.get('page_num', 1)  # 获取页面
+    muns = request.POST.get('mun', 5)  # 获取前端数据
     user_id = request.COOKIES.get('username')
     store_id = request.COOKIES.get('has_store')#获取店铺id
     goods_type = GoodsType.objects.all()
     store = Store.objects.filter(id=store_id).first()#获取对应的店铺
     money = store.store_money#得到店铺的起步资金
     goods_list = Goods.objects.filter(store_id=store_id)#获取商店对应的商品
+    for i in goods_list:
+        munds = shop_count(i.goods_name)#计算卖出的数量
+        sheng_yu = str((( munds / i.goods_number) * 100))[:5]  # 计算出剩余的百分比
+        i.goods_less = sheng_yu
+        i.save()#保存数据
+    if keywords:
+        goods_list1 = Goods.objects.filter(store_id=store_id,goods_name=keywords,goods_under=1)#获取最新商品
+    else:
+        goods_list1 = Goods.objects.filter(store_id=store_id,goods_under=1) # 获取最新商品
+    paginator = Paginator(goods_list1, muns)  # 展示的内容和每一页展示的数据
+    pages = paginator.count  # 获取数据的总条数
+    list_sum = paginator.num_pages  # 总页数
+    page = paginator.page(int(page_num))  # 获取展示页数对应的内容
+    if not page:
+        if not page and int(page_num) == 1:
+            return render(request, 'store/order_list.html')
+        else:
+            page = paginator.page(int(page_num) - 1)  # 获取展示页数对应的内容
+    page_range = paginator.page_range  # 获取页面列表数
+    next_page = int(page_num)  # 下一页默认等于当前页加一
+    go_page = int(page_num)  # 上一页默认当前页减一
+    # 判断是否为第最后一页
+    if next_page == list_sum:
+        next_page = 0
+    else:
+        next_page += 1
+    # 判断是否为第第一页
+    if go_page == 1:
+        go_page = 0
+    else:
+        go_page -= 1
+    mum = len(goods_list)#商品的数量
     count = sum([i.goods_number for i in goods_list])#获取库存状态
     counts = const(count)#计算剩余数量
     orderd_list = Order.objects.all()#查询所有的订单
@@ -240,9 +290,12 @@ def list_goods(request,status):
     paginator = Paginator(good_list,muns)#展示的内容和每一页展示的数据
     pages = paginator.count#获取数据的总条数
     list_sum = paginator.num_pages#总页数
-    page = paginator.page(int(page_num))#获取展示页数对应的内容
+    page = paginator.page(int(page_num))  # 获取展示页数对应的内容
     if not page:
-       page = paginator.page(int(page_num)-1)#获取展示页数对应的内容
+        if not page and int(page_num) == 1:
+            return render(request, 'store/order_list.html')
+        else:
+            page = paginator.page(int(page_num) - 1)  # 获取展示页数对应的内容
     page_range = paginator.page_range#获取页面列表数
     next_page = int(page_num)#下一页默认等于当前页加一
     go_page = int(page_num)#上一页默认当前页减一
@@ -379,11 +432,12 @@ def add_goodsType(request):
     paginator = Paginator(good_list, 3)  # 展示的内容和每一页展示的数据
     pages = paginator.count  # 获取数据的总条数
     list_sum = paginator.num_pages  # 总页数
-
-    if int(page_num):
-        page = paginator.page(int(page_num))  # 获取展示页数对应的内容
-    else:
-        page = paginator.page(int(page_num) - 1)  # 获取展示页数对应的内容
+    page = paginator.page(int(page_num))  # 获取展示页数对应的内容
+    if not page:
+        if not page and int(page_num) == 1:
+            return render(request, 'store/order_list.html')
+        else:
+            page = paginator.page(int(page_num) - 1)  # 获取展示页数对应的内容
 
     page_range = paginator.page_range  # 获取页面列表数
     next_page = int(page_num)  # 下一页默认等于当前页加一
@@ -428,8 +482,11 @@ def order_list(request):
     pages = paginator.count  # 获取数据的总条数
     list_sum = paginator.num_pages  # 总页数
     page = paginator.page(int(page_num))  # 获取展示页数对应的内容
-    if  not page:
-        page = paginator.page(int(page_num) - 1)  # 获取展示页数对应的内容
+    if not page:
+        if not page and int(page_num) == 1:
+            return render(request, 'store/order_list.html')
+        else:
+            page = paginator.page(int(page_num) - 1)  # 获取展示页数对应的内容
     page_range = paginator.page_range  # 获取页面列表数
     next_page = int(page_num)  # 下一页默认等于当前页加一
     go_page = int(page_num)  # 上一页默认当前页减一
@@ -491,7 +548,10 @@ def ok_order(request):
     list_sum = paginator.num_pages  # 总页数
     page = paginator.page(int(page_num))  # 获取展示页数对应的内容
     if not page:
-        page = paginator.page(int(page_num) - 1)  # 获取展示页数对应的内容
+        if not page and int(page_num) == 1:
+            return render(request, 'store/order_list.html')
+        else:
+            page = paginator.page(int(page_num) - 1)  # 获取展示页数对应的内容
     page_range = paginator.page_range  # 获取页面列表数
     next_page = int(page_num)  # 下一页默认等于当前页加一
     go_page = int(page_num)  # 上一页默认当前页减一
